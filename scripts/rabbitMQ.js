@@ -1,5 +1,5 @@
-var amqp = require('amqplib/callback_api')
 module.exports = function(robot) {
+	var amqp = require('amqplib/callback_api')
     amqp.connect('amqp://140.121.196.23:4111', function (err, conn) 
     {
       conn.createChannel(function (err, ch) 
