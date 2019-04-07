@@ -19,6 +19,4 @@ RUN yo hubot --owner="${HUBOT_OWNER}" --name="${HUBOT_NAME}" --description="${HU
 
 VOLUME ["/home/hubot/scripts"]
 
-CMD node -e "console.log(JSON.stringify('$EXTERNAL_SCRIPTS'.split(',')))" > external-scripts.json && \
-	npm install $(node -e "console.log('$EXTERNAL_SCRIPTS'.split(',').join(' '))") && \
-	bin/hubot -n $HUBOT_NAME --adapter slack
+CMD bin/hubot -n $HUBOT_NAME --adapter slack
