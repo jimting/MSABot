@@ -1,20 +1,18 @@
-var amqp = require('amqplib/callback_api')
 module.exports = function(robot) {
-    amqp.connect('amqp://140.121.196.23:4111', function (err, conn) 
-    {
-      conn.createChannel(function (err, ch) 
-      {
-        var q = 'hello'
-        ch.assertQueue(q, {durable: false})
-        console.log("Wating for message in %s. To exit press CTRL+C", q)
-        ch.consume(q, function (msg) {
-		  var json = JSON.parse(msg.content.toString())
-		  var user_data = { "room": json.roomNumber, "user_id": json.userID};
-          robot.send(user_data,"Received : "+msg.content.toString())
-        }, {noAck: true})
-      })
-    })
+	var context = require('rabbit.js').createContext('amqp://140.121.196.23:4111');
+	var sub = context.socket('SUBSCRIBE');
+	sub.connect('exchangeString');
+	sub.setEncoding('utf8');
+	sub.on('data', function(note) {
+		var json = JSON.parse(note)
+		var user_data = { "room": json.roomNumber, "user_id": json.userID};
+		robot.send(user_data,"Received : "+note)
+	});
 }
+
+
+
+
 
 
 
