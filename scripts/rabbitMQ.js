@@ -8,8 +8,8 @@ module.exports = function(robot) {
         ch.assertQueue(q, {durable: false})
         console.log("Wating for message in %s. To exit press CTRL+C", q)
         ch.consume(q, function (msg) {
-          console.log("Received %s", msg.content.toString())
-		  var user_data = { "room": "D9PCFGPH9", "user_id": 'handsome841206'};
+		  var json = JSON.parse(msg.content.toString())
+		  var user_data = { "room": json.roomNumber, "user_id": json.userID};
           robot.send(user_data,"Received : "+msg.content.toString())
         }, {noAck: true})
       })
