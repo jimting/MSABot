@@ -6,7 +6,7 @@ module.exports = function(robot) {
 	sub.on('data', function(note) {
 		var json = JSON.parse(note);
 		var user_data = { "room": json.roomNumber, "user_id": json.userID};
-		String result = "[公告]專案 " + json.build_name + "第"+json.build_number+"次建置剛剛執行了！建置結果："+json.build_status;
+		var result = "[公告]專案 " + json.build_name + "第"+json.build_number+"次建置剛剛執行了！建置結果："+json.build_status;
 		robot.send(user_data,result)
 	});
 }
