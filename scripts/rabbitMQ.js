@@ -12,8 +12,9 @@ module.exports = function(robot) {
             for(var i = 0; i < json.fail_case.length;i++)
             {
                 var f_case = json.fail_case[i];
-                result = result + "\n測試案例 \""+f_case.name+"\"有問題";
+                result = result + "\n\t測試案例 \""+f_case.name+"\"有問題";
             }
+			result = result + "\n詳細錯誤情形請到您的Jenkins查看\n" + json.build_url;
         }
         robot.send(user_data,result)
     });
