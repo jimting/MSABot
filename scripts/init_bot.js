@@ -9,11 +9,12 @@ module.exports = function(robot)
 
 function init_bot(robot)
 {
-    
     //get all bot data from mongodb
     var botData = [];
     var MongoClient = require('mongodb').MongoClient;
     var url = "mongodb://140.121.196.23:4114/apuser";
+    var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
+    robot.send(admin_data,"(機器人連線)開始初始化所有機器人");
     MongoClient.connect(url, { useNewUrlParser: false }, function(err, db) {
         if (err) throw err;
         var dbo = db.db("apuser");
@@ -22,7 +23,8 @@ function init_bot(robot)
             botData = result;
             //build and init bots
             var bots = [];
-            console.log(botData)
+            var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
+            robot.send(admin_data, "總共有"+botData.length+"個機器人資料");
             console.log("總共有"+botData.length+"個機器人資料");
             for(var i = 0; i < botData.length;i++)
             {
@@ -35,7 +37,7 @@ function init_bot(robot)
                 var tempBot = {bot:bot, token:token, name:name, data:botData[i]};
                 bots.push(tempBot);
             }
-            
+            robot.brain.set("reconnect_count", 0);
             robot.brain.set("bots", bots);
             console.log(bots);
             db.close();
@@ -75,10 +77,20 @@ function new_bot(token, name, robot, team_name)
     });
     bot.on('close', function(data) 
     {
+        var reconnect_count = robot.brain.get('reconnect_count');
+        reconnect_count = reconnect_count + 1;
+        robot.brain.set('reconnect_count', reconnect_count);
+        var bots = robot.brain.get('bots');
+        if(reconnect_count >= bots.length*3) // 如果重新連3次都沒辦法成功連線
+        {
+            reset_bot(robot);
+            return;
+        }
+        
         var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
         robot.send(admin_data,"("+ team_name +") : 機器人斷線了 開始嘗試重新連線...");
-		bot.connect();
-        //reset_bot(robot);
+        //bot.connect();
+        reset_bot(robot);
     });
     bot.on('error', function(data) 
     {
@@ -98,8 +110,10 @@ function reset_bot(robot)
     
     for(var i = 0; i < bots.length;i++)
     {
+        //一個一個刪掉
         var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
-        robot.send(admin_data,"("+bots[i].data.team_name+")重新連線");
-        bots[i].bot.connect();
+        robot.send(admin_data,"("+bots[i].data.team_name+")將重新連線");
+        delete(bots[i].bot);
     }
+    init_bot(robot);
 }
