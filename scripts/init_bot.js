@@ -100,7 +100,7 @@ function new_bot(token, name, robot, team_name)
     return bot;
 }
 
-function reset_bot(robot)
+exports.reset_bot =  function(robot)
 {
     var bots = robot.brain.get('bots');
     if(bots == null)
