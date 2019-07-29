@@ -89,8 +89,8 @@ function new_bot(token, name, robot, team_name)
         
         var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
         robot.send(admin_data,"("+ team_name +") : 機器人斷線了 開始嘗試重新連線...");
-        //bot.connect();
-        reset_bot(robot);
+        bot.connect();
+        //reset_bot(robot);
     });
     bot.on('error', function(data) 
     {
