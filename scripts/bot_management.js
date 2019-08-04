@@ -25,7 +25,13 @@ module.exports = function(robot) {
             {
                 robot.http("https://slack.com/api/channels.list?token="+bots[i].data.access_token).get()((err, res, body) =>
                 {
-                    response.send(body);
+                    var json = JSON.parse(body);
+                    var result = "";
+                    for(var i = 0;i < json.channels.length;i++)
+                    {
+                        result += "頻道 : " + json.channels[i].id +" / "+ json.channels[i].name +"\n";
+                    }
+                    response.send(result);
                 });
             //var list = bot.getUsers();
             }
@@ -43,11 +49,11 @@ module.exports = function(robot) {
         response.send("發送完畢！");
     });
   
-    robot.hear(/(機器人重新啟動)\s(.*)/, function(response) 
+    robot.hear(/(機器人重新啟動)/, function(response) 
     {
-        var reset_bot = require('./init_bot').reset_bot;
+        var bot = require('./bot');
         response.send("收到！開始重啟機器人！");
-        reset_bot(robot);
+        bot.reset_bot(robot);
     });
 
 }
