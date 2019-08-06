@@ -120,11 +120,19 @@ var reset_bot = function(robot)
         
         for(var i = 0; i < bots.length;i++)
         {
-            //一個一個更新
-            var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
-            robot.send(admin_data,"("+bots[i].data.team_name+")將重新連線");
-            bots[i].bot.emit("close");
-            bots[i].bot = new_bot(bots[i].data.bot_access_token, "APMessengerBot", robot, bots[i].data.team_name);
+            if(bots[i].bot.ws._closeCode!=null)
+            {
+                //一個一個更新
+                var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
+                robot.send(admin_data,"("+bots[i].data.team_name+")將重新連線");
+                //console.log(bots[i].bot.ws);
+                bots[i].bot = new_bot(bots[i].data.bot_access_token, "APMessengerBot", robot, bots[i].data.team_name);
+            }
+            else
+            {
+                var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
+                robot.send(admin_data,"("+bots[i].data.team_name+")RTM通道沒有問題，不用重新啟動。");
+            }
         }
         //robot.brain.set("bots", []);
         //init_bot(robot);

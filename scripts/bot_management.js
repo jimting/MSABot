@@ -52,7 +52,7 @@ module.exports = function(robot) {
     robot.hear(/(機器人重新啟動)/, function(response) 
     {
         var bot = require('./bot');
-        response.send("收到！開始重啟機器人！");
+        //response.send("收到！開始重啟機器人！");
         bot.reset_bot(robot);
     });
 
