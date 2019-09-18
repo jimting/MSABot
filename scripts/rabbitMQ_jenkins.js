@@ -6,15 +6,15 @@ module.exports = function(robot) {
     sub.on('data', function(note) {
         
         var json = JSON.parse(note);
-        var result = "[公告]專案 " + json.build_name + "第"+json.build_number+"次建置剛剛執行了！建置結果："+json.build_status;
+        var result = "["+json.build_status+"] " + json.build_name + "'s build "+json.build_number+" just finished!";
         if(json.fail_count > 0) //代表有錯誤ㄛ
         {
             for(var i = 0; i < json.fail_case.length;i++)
             {
                 var f_case = json.fail_case[i];
-                result = result + "\n\t測試案例 \""+f_case.name+"\"有問題";
+                result = result + "\n\tTestcase \""+f_case.name+"\" has some problems";
             }
-            result = result + "\n詳細錯誤情形請到您的Jenkins查看\n" + json.build_url;
+            result = result + "\nCheck the details on Jenkins!\n" + json.build_url;
         }
         
         //全部bots丟下去就對了XD
@@ -26,6 +26,10 @@ module.exports = function(robot) {
         }
     });
 }
+[UNSTABLE]CinemaCatalog's build 160 just finished!
+    Testcase "contextLoads" has some problems
+Check the details on Jenkins!
+http://140.121.196.23:4101/jenkins/job/CinemaCatalog/160/
 
 
 

@@ -16,7 +16,7 @@ var init_bot = function(robot)
     var MongoClient = require('mongodb').MongoClient;
     var url = "mongodb://140.121.196.23:4114/apuser";
     var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
-    robot.send(admin_data,"(機器人連線)開始初始化所有機器人");
+    robot.send(admin_data,"(Bots Connecting)Bots' initial start.");
     MongoClient.connect(url, { useNewUrlParser: false }, function(err, db) {
         if (err) throw err;
         var dbo = db.db("apuser");
@@ -26,8 +26,7 @@ var init_bot = function(robot)
             //build and init bots
             var bots = [];
             var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
-            robot.send(admin_data, "總共有"+botData.length+"個機器人資料");
-            console.log("總共有"+botData.length+"個機器人資料");
+            robot.send(admin_data, "There're "+botData.length+" bots now.");
             for(var i = 0; i < botData.length;i++)
             {
                 var token = botData[i].bot_access_token;

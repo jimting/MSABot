@@ -7,7 +7,7 @@ module.exports = function(robot)
     sub.on('data', function(note) {
         var botData = JSON.parse(note);
         var user_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
-        robot.send(user_data,"有Team新安裝了你的Bot! : "+botData.team_name);
+        robot.send(user_data,"There're new user installing your Bot! : "+botData.team_name);
         newBot(botData, robot);
     });
 }
@@ -49,7 +49,7 @@ function newBot(botData, robot){
                     if(data.team == bots[k].data.team_id)
                     {
                         var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
-                        robot.send(admin_data,"("+bots[k].data.team_name+")有新活動:");
+                        robot.send(admin_data,"("+bots[k].data.team_name+")Has new activity :");
                         hubotAnalyze(bots[k].bot, robot, data, bots[k].data.team_name);
                     }
                 }
