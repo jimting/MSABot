@@ -3,22 +3,22 @@
  */
 
 module.exports = function(robot) {
-    robot.hear(/(列出所有機器人)/, function(response) 
+    robot.hear(/(robot list)/, function(response) 
     {
         
         var bots = robot.brain.get('bots');
-        response.send("是的！這邊是所有的機器人資料！目前總共有"+bots.length+"個機器人 : ");
+        response.send("Got it! Here you are! The total number of robots is "+bots.length+".");
         for(var i = 0;i < bots.length; i++)
         {
-            response.send("第"+(i+1)+"個Bot屬於 :" + bots[i].data.team_name);
+            response.send((i+1)+" : " + bots[i].data.team_name);
         }
     });
   
-    robot.hear(/(列出所有頻道)\s(.*)/, function(response) 
+    robot.hear(/(robot listchannel)\s(.*)/, function(response) 
     {
         var bots = robot.brain.get('bots');
         var team = response.match[2];
-        response.send("好的！搜尋中！");
+        response.send("Got it! Searching...");
         for(var i = 0;i < bots.length; i++)
         {
             if(bots[i].data.team_name == team)
@@ -29,7 +29,7 @@ module.exports = function(robot) {
                     var result = "";
                     for(var i = 0;i < json.channels.length;i++)
                     {
-                        result += "頻道 : " + json.channels[i].id +" / "+ json.channels[i].name +"\n";
+                        result += "Channel : " + json.channels[i].id +" / "+ json.channels[i].name +"\n";
                     }
                     response.send(result);
                 });
@@ -38,18 +38,18 @@ module.exports = function(robot) {
         }
     });
   
-    robot.hear(/(機器人公告)\s(.*)/, function(response) 
+    robot.hear(/(robot announcement)\s(.*)/, function(response) 
     {
         var bots = robot.brain.get('bots');
         var result = response.match[2];
         for(var i = 0;i < bots.length; i++)
         {
-            bots[i].bot.postTo('general', "開發者公告："+result);
+            bots[i].bot.postTo('general', "[Announcement] : "+result);
         }
-        response.send("發送完畢！");
+        response.send("Sending announcement successfully.");
     });
   
-    robot.hear(/(機器人重新啟動)/, function(response) 
+    robot.hear(/(robot restart)/, function(response) 
     {
         var bot = require('./bot');
         //response.send("收到！開始重啟機器人！");
