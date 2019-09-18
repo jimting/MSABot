@@ -26,10 +26,6 @@ module.exports = function(robot) {
         }
     });
 }
-[UNSTABLE]CinemaCatalog's build 160 just finished!
-    Testcase "contextLoads" has some problems
-Check the details on Jenkins!
-http://140.121.196.23:4101/jenkins/job/CinemaCatalog/160/
 
 
 
