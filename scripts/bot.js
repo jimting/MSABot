@@ -31,7 +31,7 @@ var init_bot = function(robot)
             {
                 var token = botData[i].bot_access_token;
                 var auth = botData[i].access_token;
-                var name = "APMessengerBot";
+                var name = "MSABot";
                 var team = botData[i].team_name;
                 // create a bot
                 var bot = new_bot(token, name, robot, team);
