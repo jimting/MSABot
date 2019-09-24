@@ -21,7 +21,9 @@ module.exports = function(robot) {
 	  if (!error && res.statusCode == 200) 
 	  {
 		var buf = Buffer.from(body);
+		var buf2 = Buffer.from(res);
 		response.send("@"+response.envelope.user.name+":"+buf.toString());
+		response.send(buf2.toString())
 	  }
 	  if(error)
 		response.send("[error] @"+response.envelope.user.name+":"+error);
