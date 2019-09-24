@@ -58,9 +58,9 @@ function mentionAndAnalyze(bot, robot, data, team_name)
 	var result = data.text.match(bot_id);
     if(result != null)
     {
-		var result = getAnalyzeResult(data.text);
-		console.log(result);
-        bot.postMessage(data.channel, result[0].text).then(function(d) {
+		var ana_result = getAnalyzeResult(data.text);
+		console.log(ana_result);
+        bot.postMessage(data.channel, ana_result[0].text).then(function(d) {
             var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
             robot.send(admin_data,"("+team_name+")Sending the hello data successfully.");
         })
