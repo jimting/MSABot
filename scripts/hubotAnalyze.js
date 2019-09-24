@@ -1,5 +1,6 @@
 exports.hubotAnalyze =  function(bot, robot, data, team_name)
 {
+   console.log(data);
    mentionAndAnalyze(bot, robot, data, team_name);
    weather(bot, robot, data, team_name);
    hello(bot, robot, data, team_name);
