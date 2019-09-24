@@ -58,7 +58,7 @@ function mentionAndAnalyze(bot, robot, data, team_name)
 	var result = data.text.match(bot_id);
     if(result != null)
     {
-		getAnalyzeResult(data.text);
+		getAnalyzeResult(bot, robot, data, team_name);
     }
 }
 
