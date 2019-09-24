@@ -55,7 +55,7 @@ function hello(bot, robot, data, team_name)
 function mentionAndAnalyze(bot, robot, data, team_name)
 {
 	console.log(bot);
-	var bot_id = bot.data.bot_user_id;
+	var bot_id = bot.self.id;
 	var mention = "/@"+bot_id+"/"; //if mention bots.
     var result = data.text.match(mention);
     if(result != null)
