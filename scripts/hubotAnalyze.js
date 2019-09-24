@@ -49,3 +49,40 @@ function hello(bot, robot, data, team_name)
         
     }
 }
+
+function mentionAndAnalyze(bot, robot, data, team_name)
+{
+	var mention = /@MSABot/; //if mention bots.
+    var result = data.text.match(mention);
+    if(result != null)
+    {
+		var result = getAnalyzeResult(data.text);
+        bot.postMessage(data.channel, result[0].text).then(function(d) {
+            var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
+            robot.send(admin_data,"("+team_name+")Sending the hello data successfully.");
+        })
+        
+    }
+}
+
+function getAnalyzeResult(analyze_string)
+{
+	var request = require('request');
+	var options = {
+	  uri: 'http://140.121.197.134:5005/webhooks/rest/webhook',
+	  method: 'POST',
+	  json: {
+		"message": analyze_string
+	  }
+	};
+	
+	request(options, function (error, res, body) 
+	{
+	  if (!error && res.statusCode == 200) 
+	  {
+		return body;
+	  }
+	  if(error)
+		return [];
+	});
+}
