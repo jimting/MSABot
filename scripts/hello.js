@@ -22,8 +22,7 @@ module.exports = function(robot) {
 	  {
 		var buf = Buffer.from(body);
 		console.log(body);
-		response.send("@"+response.envelope.user.name+":"+buf.toString());
-		response.send(res)
+		response.send("@"+response.envelope.user.name+":"+body[0].text);
 	  }
 	  if(error)
 		response.send("[error] @"+response.envelope.user.name+":"+error);
