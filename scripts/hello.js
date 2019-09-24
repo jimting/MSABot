@@ -20,7 +20,6 @@ module.exports = function(robot) {
 	{
 	  if (!error && res.statusCode == 200) 
 	  {
-		var buf = Buffer.from(body);
 		console.log(body);
 		response.send("@"+response.envelope.user.name+":"+body[0].text);
 	  }
