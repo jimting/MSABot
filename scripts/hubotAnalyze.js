@@ -58,6 +58,7 @@ function mentionAndAnalyze(bot, robot, data, team_name)
 	var result = data.text.match(bot_id);
     if(result != null)
     {
+		console.log(data.text);
 		var ana_result = getAnalyzeResult(data.text);
 		console.log(ana_result);
         bot.postMessage(data.channel, ana_result[0].text).then(function(d) {
