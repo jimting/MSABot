@@ -58,25 +58,18 @@ function mentionAndAnalyze(bot, robot, data, team_name)
 	var result = data.text.match(bot_id);
     if(result != null)
     {
-		console.log(data.text);
-		var ana_result = getAnalyzeResult(data.text);
-		console.log(ana_result);
-        bot.postMessage(data.channel, ana_result[0].text).then(function(d) {
-            var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
-            robot.send(admin_data,"("+team_name+")Sending the hello data successfully.");
-        })
-        
+		getAnalyzeResult(data.text);
     }
 }
 
-function getAnalyzeResult(analyze_string)
+function getAnalyzeResult(bot, robot, data, team_name)
 {
 	var request = require('request');
 	var options = {
 	  uri: 'http://140.121.197.134:5005/webhooks/rest/webhook',
 	  method: 'POST',
 	  json: {
-		"message": analyze_string
+		"message": data.text
 	  }
 	};
 	
@@ -84,9 +77,17 @@ function getAnalyzeResult(analyze_string)
 	{
 	  if (!error && res.statusCode == 200) 
 	  {
-		return body;
+		  replyText(bot, robot, data, team_name, body);
 	  }
 	  if(error)
-		return [];
+		  return [];
 	});
+}
+
+function replyText(bot, robot, data, team_name, ana_result)
+{
+	bot.postMessage(data.channel, ana_result[0].text).then(function(d) {
+        var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
+        robot.send(admin_data,"("+team_name+")Analyze result : "+ ana_result[0].text);
+    });
 }
