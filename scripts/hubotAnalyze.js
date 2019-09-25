@@ -87,7 +87,7 @@ function getAnalyzeResult(bot, robot, data, team_name)
 function replyText(bot, robot, data, team_name, ana_result)
 {
 	console.log(ana_result);
-	bot.postMessage(data.channel, ana_result[0]).then(function(d) {
+	bot.postMessage(data.channel, ana_result[0].text).then(function(d) {
         var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
         robot.send(admin_data,"("+team_name+")Analyze result : "+ ana_result[0].text);
     });
