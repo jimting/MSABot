@@ -80,7 +80,7 @@ function getAnalyzeResult(bot, robot, data, team_name)
 		  replyText(bot, robot, data, team_name, body);
 	  }
 	  if(error)
-		  return [];
+		  bot.postMessage(data.channel, "Something wild occur! I can't analyze what you meaning!");
 	});
 }
 
