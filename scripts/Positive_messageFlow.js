@@ -51,6 +51,7 @@ function stage0(bot, robot, data, team_name)
 			// check if the result include the service name.
 			
 			var stage = robot.brain.get('stage'+data.channel);
+			console.log("此對話階段 : " + stage);
 			if(stage != 0 && stage != null)
 			{
 				console.log("有先前對話進行中");
@@ -85,7 +86,7 @@ function stage1(bot, robot, data, team_name, service, intent)
 	robot.brain.set("stage"+data.channel, 1);
 	robot.brain.set("intent"+data.channel, intent);
 	
-	if(service=="none" | service==null)
+	if(service=="none" || service==null)
 	{
 		stage2(bot, robot, data, team_name, intent);
 	}
