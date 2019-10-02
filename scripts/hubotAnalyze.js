@@ -83,8 +83,8 @@ function getAnalyzeResult(bot, robot, data, team_name)
 	  {
 		  var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
 		  robot.send(admin_data,"Rasa Server is inactive! Please check it!");
-	  }
 		  bot.postMessage(data.channel, "Sorry, the server got something wrong. I'll be back in minutes! ");
+	  }
 	});
 }
 

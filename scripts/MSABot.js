@@ -69,7 +69,7 @@ var new_bot = function(token, name, robot, team_name)
             if(data.subtype!='bot_message' && data.bot_id==null)
             {
                 var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
-                robot.send(admin_data,"("+team_name+")有新活動/使用者編號 "+data.user+" 在 聊天室編號 "+data.channel+" 說 "+data.text);
+                robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] "+data.user+" : "+data.text);
                 hubotAnalyze(bot, robot, data, team_name);
             }
         }
@@ -80,26 +80,12 @@ var new_bot = function(token, name, robot, team_name)
     });
     bot.on('close', function(data) 
     {
-        /*
-        var reconnect_count = robot.brain.get('reconnect_count');
-        reconnect_count = reconnect_count + 1;
-        robot.brain.set('reconnect_count', reconnect_count);
-        var bots = robot.brain.get('bots');
-        if(reconnect_count >= bots.length*3) // 如果重新連3次都沒辦法成功連線
-        {
-            reset_bot(robot);
-            return;
-        }
-        
-        var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
-        robot.send(admin_data,"("+ team_name +") : 機器人斷線了 開始嘗試重新連線...");
-        bot.connect();*/
         reset_bot(robot);
     });
     bot.on('error', function(data) 
     {
         var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
-        robot.send(admin_data,"("+ team_name +")機器人遇到錯誤了 :" + data);
+        robot.send(admin_data,"("+ team_name +")The bot got something wrong QwQ :" + data);
     });
     bot.login();
     return bot;
@@ -115,7 +101,7 @@ var reset_bot = function(robot)
         if(bots == null)
             bots = [];
         var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
-        robot.send(admin_data,"遇到連線問題或收到重啟指令，開始重新設定機器人");
+        robot.send(admin_data,"Reset the bots...");
         
         for(var i = 0; i < bots.length;i++)
         {
@@ -123,14 +109,14 @@ var reset_bot = function(robot)
             {
                 //一個一個更新
                 var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
-                robot.send(admin_data,"("+bots[i].data.team_name+")將重新連線");
+                robot.send(admin_data,"("+bots[i].data.team_name+")The bot will reconnect to RTM.");
                 //console.log(bots[i].bot.ws);
                 bots[i].bot = new_bot(bots[i].data.bot_access_token, "APMessengerBot", robot, bots[i].data.team_name);
             }
             else
             {
                 var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
-                robot.send(admin_data,"("+bots[i].data.team_name+")RTM通道沒有問題，不用重新啟動。");
+                robot.send(admin_data,"("+bots[i].data.team_name+")RTM has no problem.");
             }
         }
         //robot.brain.set("bots", []);
@@ -143,5 +129,5 @@ var setResetCheck0 = function(robot)
 {
     robot.brain.set('reset_check', 0);
     var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
-    robot.send(admin_data,"所有動作已結束，重新恢復可重啟狀態");
+    robot.send(admin_data,"All resettings are done.");
 }
