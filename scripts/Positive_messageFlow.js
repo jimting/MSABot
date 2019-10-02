@@ -134,7 +134,7 @@ function action_service_health(bot, robot, data, team_name, service)
 	{
 		var tokens = data.split("\r\n");
 		for(var token in tokens)
-			health_data+=data;
+			health_data+=token;
     });
 	console.log(health_data);
 	var json_data = JSON.parse(health_data);
