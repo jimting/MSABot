@@ -94,11 +94,11 @@ function stage1(bot, robot, data, team_name, json_data, intent)
 	{
 		switch(intent)
 		{
-			case "action_service_health"	:action_service_health(bot, robot, data, team_name, intent, service);break;
-			case "action_service_info"		:action_service_info(bot, robot, data, team_name, intent, service);break;
-			case "action_service_using_info":action_service_using_info(bot, robot, data, team_name, intent, service);break;
-			case "action_service_api_list"	:action_service_api_list(bot, robot, data, team_name, intent, service);break;
-			case "action_service_env"		:action_service_env(bot, robot, data, team_name, intent, service);break;
+			case "action_service_health"	:action_service_health(bot, robot, data, team_name, service);break;
+			case "action_service_info"		:action_service_info(bot, robot, data, team_name, service);break;
+			case "action_service_using_info":action_service_using_info(bot, robot, data, team_name, service);break;
+			case "action_service_api_list"	:action_service_api_list(bot, robot, data, team_name, service);break;
+			case "action_service_env"		:action_service_env(bot, robot, data, team_name, service);break;
 		}
 	}
 }
