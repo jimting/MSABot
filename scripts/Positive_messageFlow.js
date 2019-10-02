@@ -137,10 +137,9 @@ function action_service_health(bot, robot, data, team_name, service)
 		result += "The Eureka Server is : " + json_data.discoveryComposite.eureka.status+ "\n";
 		result += "The hytrix status is : " + json_data.hystrix.status+ "\n";
 		console.log(result);
-		console.log(bot);
 		var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
 		robot.send(admin_data,result);
-		bot.postTo('general', result);
+		bot.postMessage(data.channel, result);
 		robot.send(admin_data,"Sending the health data result success!");
     });
 }
