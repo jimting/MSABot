@@ -140,7 +140,7 @@ function action_service_health(bot, robot, data, team_name, service)
 		console.log(bot);
 		var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
 		robot.send(admin_data,result);
-		bot.postMessage(data.channel, result);
+		bot.postTo('general', result);
 		robot.send(admin_data,"Sending the health data result success!");
     });
 }
