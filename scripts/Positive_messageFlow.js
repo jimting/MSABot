@@ -131,18 +131,18 @@ function action_service_health(bot, robot, data, team_name, service)
 	var fs = require("fs");
 	fs.readFile('scripts/data/service_health.txt', 'utf8', function(err, data) 
 	{
-		console.log(data);
 		var json_data = JSON.parse(data);
 		var result = "Hey, the " + service + " 's health data is down below: \n";
 		result += "The status to this service : " + json_data.status + "\n";
 		result += "The Composite Discovery Client is : " + json_data.discoveryComposite.status;
 		result += "The Eureka Server is : " + json_data.discoveryComposite.eureka.status;
 		result += "The hytrix status is : " + json_data.hystrix.status;
-		
+		console.log(result)
 		var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
-		robot.send(admin_data,"Sending the health data result success!");
-		
+		robot.send(admin_data,result);
 		bot.postMessage(data.channel, result);
+		
+		robot.send(admin_data,"Sending the health data result success!");
     });
 }
 
