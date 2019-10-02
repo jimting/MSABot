@@ -130,12 +130,13 @@ function action_service_health(bot, robot, data, team_name, service)
 	
 	var fs = require("fs");
 	var health_data = "";
-	fs.readFile('service_health.txt', 'utf8', function(err, data) 
+	fs.readFile('scripts/data/service_health.txt', 'utf8', function(err, data) 
 	{
 		var tokens = data.split("\r\n");
 		for(var token in tokens)
 			health_data+=data;
     });
+	console.log(health_data);
 	var json_data = JSON.parse(health_data);
 	var result = "Hey, the " + service + " 's health data is down below: \n";
 	result += "The status to this service : " + json_data.status + "\n";
