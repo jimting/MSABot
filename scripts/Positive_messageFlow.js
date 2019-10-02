@@ -23,9 +23,6 @@ function mentionAndAnalyze(bot, robot, data, team_name)
 /* send request and check if result has intent */
 function stage0(bot, robot, data, team_name)
 {
-	// setting the stage first.
-	robot.brain.set("stage"+data.channel, 0);
-	
 	var request = require('request');
 	var options = {
 	  uri: 'http://140.121.197.134:4112/webhooks/rest/webhook',
