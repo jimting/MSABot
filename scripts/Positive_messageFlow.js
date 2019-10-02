@@ -79,7 +79,7 @@ function stage0(bot, robot, data, team_name)
 }
 
 /*check if the result has service name*/
-function stage1(bot, robot, data, team_name, intent, service)
+function stage1(bot, robot, data, team_name, service, intent)
 {
 	// setting the stage and intent first.
 	robot.brain.set("stage"+data.channel, 1);
