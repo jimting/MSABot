@@ -129,25 +129,26 @@ function action_service_health(bot, robot, data, team_name, service)
 	robot.brain.set("stage"+data.channel, 0);
 	
 	var fs = require("fs");
-	var health_data = "";
 	fs.readFile('scripts/data/service_health.txt', 'utf8', function(err, data) 
 	{
+		var health_data = "";
 		var tokens = data.split("\r\n");
 		for(var token in tokens)
 			health_data+=token;
+	
+		console.log(health_data);
+		var json_data = JSON.parse(health_data);
+		var result = "Hey, the " + service + " 's health data is down below: \n";
+		result += "The status to this service : " + json_data.status + "\n";
+		result += "The Composite Discovery Client is : " + json_data.discoveryComposite.status;
+		result += "The Eureka Server is : " + json_data.discoveryComposite.eureka.status;
+		result += "The hytrix status is : " + json_data.hystrix.status;
+		
+		var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
+		robot.send(admin_data,"Sending the health data result success!");
+		
+		bot.postMessage(data.channel, result);
     });
-	console.log(health_data);
-	var json_data = JSON.parse(health_data);
-	var result = "Hey, the " + service + " 's health data is down below: \n";
-	result += "The status to this service : " + json_data.status + "\n";
-	result += "The Composite Discovery Client is : " + json_data.discoveryComposite.status;
-	result += "The Eureka Server is : " + json_data.discoveryComposite.eureka.status;
-	result += "The hytrix status is : " + json_data.hystrix.status;
-	
-	var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
-	robot.send(admin_data,"Sending the health data result success!");
-	
-	bot.postMessage(data.channel, result);
 }
 
 function action_service_info(bot, robot, data, team_name, service)
