@@ -39,13 +39,15 @@ function getAnalyzeResult(bot, robot, data, team_name)
 	{
 		if (!error && res.statusCode == 200) 
 		{
+			var json_data = JSON.parse(body[0].text);
+			var intent = json_data.intent;
 			// check what result it is ! 
 			// json : {'intent': 'action_name', 'service': 'service_name'}
 			//switch(body[0].text['service']){}
-			bot.postMessage(data.channel, body[0].text.intent).then(function(d) 
+			bot.postMessage(data.channel, intent).then(function(d) 
 			{
 				var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
-				robot.send(admin_data,"("+team_name+")Analyze result : "+ body[0].text);
+				robot.send(admin_data,"("+team_name+")Analyze result : "+ intent);
 			});
 		}
 		if(error)
