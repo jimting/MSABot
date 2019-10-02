@@ -49,7 +49,7 @@ var init_bot = function(robot)
 
 var new_bot = function(token, name, robot, team_name)
 {
-    var hubotAnalyze = require('./hubotAnalyze').hubotAnalyze;
+    var hubotAnalyze = require('./Positive_messageAnalyzer').hubotAnalyze;
     var SlackBot = require('slackbots');
     var bot = new SlackBot({
         token: token, // Add a bot https://my.slack.com/services/new/bot and put the token 
