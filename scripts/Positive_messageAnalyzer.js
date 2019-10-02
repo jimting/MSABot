@@ -40,8 +40,8 @@ function getAnalyzeResult(bot, robot, data, team_name)
 		if (!error && res.statusCode == 200) 
 		{
 			console.log(body[0]);
-			var json_data = body[0].text;
-			var intent = json_data['intent'];
+			var json_data = JSON.parse((body[0].text).replace("'", ""));
+			var intent = json_data.intent;
 			// check what result it is ! 
 			// json : {'intent': 'action_name', 'service': 'service_name'}
 			//switch(body[0].text['service']){}
