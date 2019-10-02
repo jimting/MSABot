@@ -134,7 +134,7 @@ function action_service_health(bot, robot, data, team_name, service)
 		var result = "Hey, the " + service + " 's health data is down below: ";
 		bot.postMessage(data.channel, result);
 		
-		result = "The status to this service : " + json_data.status";
+		result = "The status to this service : " + json_data.status;
 		bot.postMessage(data.channel, result);
 		
 		result = "The Composite Discovery Client is : " + json_data.discoveryComposite.status;
