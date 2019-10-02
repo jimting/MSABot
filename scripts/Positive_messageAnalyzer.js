@@ -41,7 +41,7 @@ function getAnalyzeResult(bot, robot, data, team_name)
 		{
 			console.log(body[0]);
 			var json_data = body[0].text;
-			var intent = json_data.intent;
+			var intent = json_data['intent'];
 			// check what result it is ! 
 			// json : {'intent': 'action_name', 'service': 'service_name'}
 			//switch(body[0].text['service']){}
