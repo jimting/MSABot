@@ -25,7 +25,7 @@ function stage0(bot, robot, data, team_name)
 {
 	var request = require('request');
 	var options = {
-	  uri: 'http://140.121.197.134:4112/webhooks/rest/webhook',
+	  uri: 'http://140.121.196.23:4112/webhooks/rest/webhook',
 	  method: 'POST',
 	  json: 
 	  {
@@ -136,9 +136,8 @@ function action_service_health(bot, robot, data, team_name, service)
 		result += "The hytrix status is : " + json_data.hystrix.status+ "\n";
 		console.log(result);
 		var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
-		robot.send(admin_data,result);
 		bot.postMessage(data.channel, result);
-		robot.send(admin_data,"Sending the health data result success!");
+		robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the service health data successfully!");
     });
 }
 
@@ -148,6 +147,7 @@ function action_service_info(bot, robot, data, team_name, service)
 	robot.brain.set("stage"+data.channel, 0);
 	
 	bot.postMessage(data.channel, "Here is service \"" + service +"\" 's information.");
+	robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the service information successfully!");
 }
 
 function action_service_using_info(bot, robot, data, team_name, service)
@@ -156,6 +156,7 @@ function action_service_using_info(bot, robot, data, team_name, service)
 	robot.brain.set("stage"+data.channel, 0);
 	
 	bot.postMessage(data.channel, "Here is service \"" + service +"\" 's using overview.");
+	robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the service overview successfully!");
 }
 
 function action_service_api_list(bot, robot, data, team_name, service)
@@ -164,6 +165,7 @@ function action_service_api_list(bot, robot, data, team_name, service)
 	robot.brain.set("stage"+data.channel, 0);
 	
 	bot.postMessage(data.channel, "Here is service \"" + service +"\" 's api list.");
+	robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the service api list successfully!");
 }
 
 function action_service_env(bot, robot, data, team_name, service)
@@ -172,4 +174,5 @@ function action_service_env(bot, robot, data, team_name, service)
 	robot.brain.set("stage"+data.channel, 0);
 	
 	bot.postMessage(data.channel, "Here is service \"" + service +"\" 's env setting.");
+	robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the env information successfully!");
 }
