@@ -19,7 +19,7 @@ function getAnalyzeResult(bot, robot, data, team_name)
 {
 	var request = require('request');
 	var options = {
-	  uri: 'http://140.121.196.23:4112/webhooks/rest/webhook',
+	  uri: 'http://140.121.197.134:4112/webhooks/rest/webhook',
 	  method: 'POST',
 	  json: {
 		"message": data.text
