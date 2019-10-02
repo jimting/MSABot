@@ -118,7 +118,7 @@ function stage2(bot, robot, data, team_name, intent)
 	}
 	var result = "Hey, before we catch the "+intentStr+", we need to know what service you wanna search. ";
 	bot.postMessage(data.channel, result);
-	var 
+	
 	//end the flow
 }
 
