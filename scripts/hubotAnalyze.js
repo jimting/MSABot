@@ -80,7 +80,11 @@ function getAnalyzeResult(bot, robot, data, team_name)
 		  replyText(bot, robot, data, team_name, body);
 	  }
 	  if(error)
-		  bot.postMessage(data.channel, "Something wild occur! I can't analyze what you meaning!");
+	  {
+		  var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
+		  robot.send(admin_data,"Rasa Server is inactive! Please check it!");
+	  }
+		  bot.postMessage(data.channel, "Sorry, the server got something wrong. I'll be back in minutes! ");
 	});
 }
 

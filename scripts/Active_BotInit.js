@@ -3,6 +3,6 @@
 */
 module.exports = function(robot) 
 {
-    var bot = require('./bot');
+    var bot = require('./MSABot');
     bot.init_bot(robot);
 }

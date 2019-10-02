@@ -51,7 +51,7 @@ module.exports = function(robot) {
   
     robot.hear(/(robot restart)/, function(response) 
     {
-        var bot = require('./bot');
+        var bot = require('./MSABot');
         //response.send("收到！開始重啟機器人！");
         bot.reset_bot(robot);
     });
