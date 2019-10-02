@@ -11,14 +11,11 @@ function mentionAndAnalyze(bot, robot, data, team_name)
 	var result = data.text.match(bot_id);
     if(result != null)
     {
-		var stage = robot.brain.get('stage'+data.channel);
 		switch(stage)
 		{
 			// if got stage 1, means that the channel lack the service name. and the next input should include the service name XD
 			case 2 :
-				var intent = robot.brain.get('intent'+data.channel);
-				stage1(bot, robot, data, team_name, intent);
-				break;
+				
 			default : 
 				stage0(bot, robot, data, team_name);
 		}
@@ -54,12 +51,22 @@ function stage0(bot, robot, data, team_name)
 			var json_data = JSON.parse((body[0].text).replace(/'/g, '"'));
 			console.log(json_data);
 			var intent = json_data.intent;
+			var service = json_data.service;
+
 			// check what result it is ! 
 			// json : {'intent': 'action_name', 'service': 'service_name'}
 			// check if the result include the service name.
+			
+			var stage = robot.brain.get('stage'+data.channel);
+			if(stage == 2)
+			{
+				console.log("有先前對話進行中");
+				intent = robot.brain.get('intent'+data.channel);
+			}
+			
 			if(intent != "none")
 			{
-				stage1(bot, robot, data, team_name, json_data, intent);
+				stage1(bot, robot, data, team_name, service, intent);
 			}
 			else
 			{
@@ -79,13 +86,12 @@ function stage0(bot, robot, data, team_name)
 }
 
 /*check if the result has service name*/
-function stage1(bot, robot, data, team_name, json_data, intent)
+function stage1(bot, robot, data, team_name, intent, service)
 {
 	// setting the stage and intent first.
 	robot.brain.set("stage"+data.channel, 1);
 	robot.brain.set("intent"+data.channel, 0);
 	
-	var service = json_data.service;
 	if(service=="none" | service==null)
 	{
 		stage2(bot, robot, data, team_name, intent);
