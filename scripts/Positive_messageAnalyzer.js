@@ -42,7 +42,7 @@ function getAnalyzeResult(bot, robot, data, team_name)
 			// check what result it is ! 
 			// json : {'intent': 'action_name', 'service': 'service_name'}
 			//switch(body[0].text['service']){}
-			bot.postMessage(data.channel, body[0].text['intent']).then(function(d) 
+			bot.postMessage(data.channel, body[0].text.intent).then(function(d) 
 			{
 				var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
 				robot.send(admin_data,"("+team_name+")Analyze result : "+ body[0].text);
