@@ -84,6 +84,7 @@ function stage1(bot, robot, data, team_name, json_data, intent)
 	// setting the stage and intent first.
 	robot.brain.set("stage"+data.channel, 1);
 	robot.brain.set("intent"+data.channel, 0);
+	
 	var service = json_data.service;
 	if(service=="none" | service==null)
 	{
@@ -106,6 +107,7 @@ function stage2(bot, robot, data, team_name, intent)
 {
 	// setting the stage first.
 	robot.brain.set("stage", 2);
+	
 	var intentStr = "";
 	switch(intent)
 	{
@@ -123,6 +125,9 @@ function stage2(bot, robot, data, team_name, intent)
 
 function action_service_health(bot, robot, data, team_name, service)
 {
+	// setting the stage first.
+	robot.brain.set("stage"+data.channel, 0);
+	
 	var fs = require("fs");
 	fs.readFile('service_health.txt', 'utf8', function(err, data) 
 	{
@@ -143,6 +148,9 @@ function action_service_health(bot, robot, data, team_name, service)
 
 function action_service_info(bot, robot, data, team_name, service)
 {
+	// setting the stage first.
+	robot.brain.set("stage"+data.channel, 0);
+	
 	var fs = require("fs");
 	fs.readFile('service_health.txt', 'utf8', function(err, data) 
 	{
@@ -151,10 +159,15 @@ function action_service_info(bot, robot, data, team_name, service)
 			console.log(datas[data])
     });
 	var json_data = JSON.parse(datas);
+	
+	bot.postMessage(data.channel, "Here is service \"" + service +"\" 's information.");
 }
 
 function action_service_using_info(bot, robot, data, team_name, service)
 {
+	// setting the stage first.
+	robot.brain.set("stage"+data.channel, 0);
+	
 	var fs = require("fs");
 	fs.readFile('service_health.txt', 'utf8', function(err, data) 
 	{
@@ -163,10 +176,15 @@ function action_service_using_info(bot, robot, data, team_name, service)
 			console.log(datas[data])
     });
 	var json_data = JSON.parse(datas);
+	
+	bot.postMessage(data.channel, "Here is service \"" + service +"\" 's using overview.");
 }
 
 function action_service_api_list(bot, robot, data, team_name, service)
 {
+	// setting the stage first.
+	robot.brain.set("stage"+data.channel, 0);
+	
 	var fs = require("fs");
 	fs.readFile('service_health.txt', 'utf8', function(err, data) 
 	{
@@ -175,10 +193,15 @@ function action_service_api_list(bot, robot, data, team_name, service)
 			console.log(datas[data])
     });
 	var json_data = JSON.parse(datas);
+	
+	bot.postMessage(data.channel, "Here is service \"" + service +"\" 's api list.");
 }
 
 function action_service_env(bot, robot, data, team_name, service)
 {
+	// setting the stage first.
+	robot.brain.set("stage"+data.channel, 0);
+	
 	var fs = require("fs");
 	fs.readFile('service_health.txt', 'utf8', function(err, data) 
 	{
@@ -187,4 +210,6 @@ function action_service_env(bot, robot, data, team_name, service)
 			console.log(datas[data])
     });
 	var json_data = JSON.parse(datas);
+	
+	bot.postMessage(data.channel, "Here is service \"" + service +"\" 's env setting.");
 }
