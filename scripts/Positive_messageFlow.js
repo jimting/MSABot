@@ -83,7 +83,7 @@ function stage1(bot, robot, data, team_name, service, intent)
 {
 	// setting the stage and intent first.
 	robot.brain.set("stage"+data.channel, 1);
-	robot.brain.set("intent"+data.channel, 0);
+	robot.brain.set("intent"+data.channel, intent);
 	
 	if(service=="none" | service==null)
 	{
@@ -105,7 +105,7 @@ function stage1(bot, robot, data, team_name, service, intent)
 function stage2(bot, robot, data, team_name, intent)
 {
 	// setting the stage first.
-	robot.brain.set("stage", 2);
+	robot.brain.set("stage"+data.channel, 2);
 	
 	var intentStr = "";
 	switch(intent)
