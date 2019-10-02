@@ -132,11 +132,11 @@ function action_service_health(bot, robot, data, team_name, service)
 	var health_data = "";
 	fs.readFile('service_health.txt', 'utf8', function(err, data) 
 	{
-		datas = data.split("\r\n");
-		for(var data in datas)
+		var tokens = data.split("\r\n");
+		for(var token in tokens)
 			health_data+=data;
     });
-	var json_data = JSON.parse(datas);
+	var json_data = JSON.parse(health_data);
 	var result = "Hey, the " + service + " 's health data is down below: \n";
 	result += "The status to this service : " + json_data.status + "\n";
 	result += "The Composite Discovery Client is : " + json_data.discoveryComposite.status;
