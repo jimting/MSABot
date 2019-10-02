@@ -128,9 +128,9 @@ function action_service_health(bot, robot, data, team_name, service)
 	robot.brain.set("stage"+data.channel, 0);
 	
 	var fs = require("fs");
-	fs.readFile('scripts/data/service_health.txt', 'utf8', function(err, data) 
+	fs.readFile('scripts/data/service_health.txt', 'utf8', function(err, d) 
 	{
-		var json_data = JSON.parse(data);
+		var json_data = JSON.parse(d);
 		var result = "Hey, the " + service + " 's health data is down below: \n";
 		result += "The status to this service : " + json_data.status + "\n";
 		result += "The Composite Discovery Client is : " + json_data.discoveryComposite.status+ "\n";
