@@ -11,14 +11,7 @@ function mentionAndAnalyze(bot, robot, data, team_name)
 	var result = data.text.match(bot_id);
     if(result != null)
     {
-		switch(stage)
-		{
-			// if got stage 1, means that the channel lack the service name. and the next input should include the service name XD
-			case 2 :
-				
-			default : 
-				stage0(bot, robot, data, team_name);
-		}
+		stage0(bot, robot, data, team_name);
     }
 }
 
