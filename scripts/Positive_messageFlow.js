@@ -131,19 +131,19 @@ function action_service_health(bot, robot, data, team_name, service)
 	fs.readFile('scripts/data/service_health.txt', 'utf8', function(err, data) 
 	{
 		var json_data = JSON.parse(data);
-		var result = "Hey, the " + service + " 's health data is down below: \n";
+		var result = "Hey, the " + service + " 's health data is down below: ";
 		bot.postMessage(data.channel, result);
 		
-		result = "The status to this service : " + json_data.status + "\n";
+		result = "The status to this service : " + json_data.status";
 		bot.postMessage(data.channel, result);
 		
-		result = "The Composite Discovery Client is : " + json_data.discoveryComposite.status+ "\n";
+		result = "The Composite Discovery Client is : " + json_data.discoveryComposite.status;
 		bot.postMessage(data.channel, result);
 		
-		result = "The Eureka Server is : " + json_data.discoveryComposite.eureka.status+ "\n";
+		result = "The Eureka Server is : " + json_data.discoveryComposite.eureka.status;
 		bot.postMessage(data.channel, result);
 		
-		result = "The hytrix status is : " + json_data.hystrix.status+ "\n";
+		result = "The hytrix status is : " + json_data.hystrix.status;
 		bot.postMessage(data.channel, result);
 		
 		var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
