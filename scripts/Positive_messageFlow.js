@@ -131,13 +131,8 @@ function action_service_health(bot, robot, data, team_name, service)
 	var fs = require("fs");
 	fs.readFile('scripts/data/service_health.txt', 'utf8', function(err, data) 
 	{
-		var health_data = "";
-		var tokens = data.split("\r\n");
-		for(var token in tokens)
-			health_data+=token;
-	
-		console.log(health_data);
-		var json_data = JSON.parse(health_data);
+		console.log(data);
+		var json_data = JSON.parse(data);
 		var result = "Hey, the " + service + " 's health data is down below: \n";
 		result += "The status to this service : " + json_data.status + "\n";
 		result += "The Composite Discovery Client is : " + json_data.discoveryComposite.status;
