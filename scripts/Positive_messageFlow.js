@@ -54,10 +54,10 @@ function stage0(bot, robot, data, team_name)
 			if(stage == 2)
 			{
 				console.log("有先前對話進行中");
-				intent = robot.brain.get('intent'+data.channel);
+				intent2 = robot.brain.get('intent'+data.channel);
+				stage1(bot, robot, data, team_name, service, intent2);
 			}
-			
-			if(intent != "none")
+			else if(intent != "none")
 			{
 				stage1(bot, robot, data, team_name, service, intent);
 			}
