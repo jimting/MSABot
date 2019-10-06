@@ -1,19 +1,20 @@
+var admin_data = { "room": process.env.adminRoom, "user_id": process.env.adminID};
+		
 module.exports = function(robot) 
 {
 	/*########## for bot's connection detecting ##########*/
-    var context = require('rabbit.js').createContext('amqp://140.121.196.23:4111');
+    var context = require('rabbit.js').createContext(process.env.RabbitMQUrl);
     var sub = context.socket('SUBSCRIBE');
     sub.connect('bots');
     sub.setEncoding('utf8');
     sub.on('data', function(note) {
         var botData = JSON.parse(note);
-        var user_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
-        robot.send(user_data,"There're new user installing your Bot! : "+botData.team_name);
+        robot.send(admin_data,"There're new user installing your Bot! : "+botData.team_name);
         newBot(botData, robot);
     });
 	
 	/*########## for Jenkins server ##########*/
-	var context = require('rabbit.js').createContext('amqp://140.121.196.23:4111');
+	var context = require('rabbit.js').createContext(process.env.RabbitMQUrl);
     var sub = context.socket('SUBSCRIBE');
     sub.connect('exchangeString');
     sub.setEncoding('utf8');
@@ -77,7 +78,6 @@ function newBot(botData, robot){
                 {
                     if(data.team == bots[k].data.team_id)
                     {
-                        var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
                         robot.send(admin_data,"("+bots[k].data.team_name+")Has new activity :");
                         hubotAnalyze(bots[k].bot, robot, data, bots[k].data.team_name);
                     }

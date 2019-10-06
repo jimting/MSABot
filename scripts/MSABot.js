@@ -1,3 +1,5 @@
+var admin_data = { "room": process.env.adminRoom, "user_id": process.env.adminID};
+		
 exports.init_bot =  function(robot)
 {
    init_bot(robot);
@@ -14,8 +16,7 @@ var init_bot = function(robot)
     //get all bot data from mongodb
     var botData = [];
     var MongoClient = require('mongodb').MongoClient;
-    var url = "mongodb://140.121.196.23:4114/apuser";
-    var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
+    var url = process.env.UserDB;
     robot.send(admin_data,"(Bots Connecting)Bots' initial start.");
     MongoClient.connect(url, { useNewUrlParser: false }, function(err, db) {
         if (err) throw err;
@@ -25,7 +26,6 @@ var init_bot = function(robot)
             botData = result;
             //build and init bots
             var bots = [];
-            var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
             robot.send(admin_data, "There're "+botData.length+" bots now.");
             for(var i = 0; i < botData.length;i++)
             {
@@ -68,7 +68,6 @@ var new_bot = function(token, name, robot, team_name)
         {
             if(data.subtype!='bot_message' && data.bot_id==null)
             {
-                var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
                 robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] "+data.user+" : "+data.text);
                 hubotAnalyze(bot, robot, data, team_name);
             }
@@ -84,7 +83,6 @@ var new_bot = function(token, name, robot, team_name)
     });
     bot.on('error', function(data) 
     {
-        var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
         robot.send(admin_data,"("+ team_name +")The bot got something wrong QwQ :" + data);
     });
     bot.login();
@@ -100,7 +98,6 @@ var reset_bot = function(robot)
         var bots = robot.brain.get('bots');
         if(bots == null)
             bots = [];
-        var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
         robot.send(admin_data,"Reset the bots...");
         
         for(var i = 0; i < bots.length;i++)
@@ -108,14 +105,12 @@ var reset_bot = function(robot)
             if(bots[i].bot.ws._closeCode!=null)
             {
                 //一個一個更新
-                var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
                 robot.send(admin_data,"("+bots[i].data.team_name+")The bot will reconnect to RTM.");
                 //console.log(bots[i].bot.ws);
                 bots[i].bot = new_bot(bots[i].data.bot_access_token, "APMessengerBot", robot, bots[i].data.team_name);
             }
             else
             {
-                var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
                 robot.send(admin_data,"("+bots[i].data.team_name+")RTM has no problem.");
             }
         }
@@ -128,6 +123,5 @@ var reset_bot = function(robot)
 var setResetCheck0 = function(robot)
 {
     robot.brain.set('reset_check', 0);
-    var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
     robot.send(admin_data,"All resettings are done.");
 }

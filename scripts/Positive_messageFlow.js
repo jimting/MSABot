@@ -1,3 +1,4 @@
+var admin_data = { "room": process.env.adminRoom, "user_id": process.env.adminID};
 exports.hubotAnalyze =  function(bot, robot, data, team_name)
 {
    console.log(data);
@@ -25,7 +26,7 @@ function stage0(bot, robot, data, team_name)
 {
 	var request = require('request');
 	var options = {
-	  uri: 'http://140.121.196.23:4112/webhooks/rest/webhook',
+	  uri: process.env.RasaUrl + '/webhooks/rest/webhook',
 	  method: 'POST',
 	  json: 
 	  {
@@ -68,7 +69,6 @@ function stage0(bot, robot, data, team_name)
 		}
 		if(error)
 		{
-			var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
 			robot.send(admin_data,"Rasa Server is inactive! Please check it!");
 			bot.postMessage(data.channel, "Sorry, the server got something wrong. I'll be back in minutes! QAQ");
 			// end the flow
@@ -135,7 +135,6 @@ function action_service_health(bot, robot, data, team_name, service)
 		result += "The Eureka Server is : " + json_data.discoveryComposite.eureka.status+ "\n";
 		result += "The hytrix status is : " + json_data.hystrix.status+ "\n";
 		console.log(result);
-		var admin_data = { "room": "D9PCFGPH9", "user_id": "handsome841206"};
 		bot.postMessage(data.channel, result);
 		robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the service health data successfully!");
     });

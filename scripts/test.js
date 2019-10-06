@@ -9,9 +9,10 @@ module.exports = function(robot) {
 	var request = require('request');
 
 	var options = {
-	  uri: 'http://140.121.196.23:4112/webhooks/rest/webhook',
+	  uri: process.env.RasaUrl + '/webhooks/rest/webhook',
 	  method: 'POST',
-	  json: {
+	  json: 
+	  {
 		"message": analyze_string
 	  }
 	};
