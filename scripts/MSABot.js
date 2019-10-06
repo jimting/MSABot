@@ -64,6 +64,7 @@ var new_bot = function(token, name, robot, team_name)
     });
     bot.on('message', function(data) 
     {
+		console.log(data);
         if(data.type=="message")
         {
             if(data.subtype!='bot_message' && data.bot_id==null)

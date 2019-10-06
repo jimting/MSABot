@@ -2,7 +2,7 @@ var admin_data = { "room": process.env.adminRoom, "user_id": process.env.adminID
 		
 module.exports = function(robot) 
 {
-	/*########## for bot's connection detecting ##########*/
+	/*########## for bot's installing detecting ##########*/
     var context = require('rabbit.js').createContext(process.env.RabbitMQUrl);
     var sub = context.socket('SUBSCRIBE');
     sub.connect('bots');
