@@ -7,56 +7,49 @@ exports.hubotAnalyze =  function(bot, robot, data, team_name)
    //if not mention user, means that user may use the setting func.
    if(!mentionAndAnalyze(bot, robot, data, team_name))
    {
-	   eurekaSetting(bot, robot, data, team_name);
-	   jenkinsSetting(bot, robot, data, team_name);
-	   getServerUrl(bot, robot, data, team_name);
+	   commandAnalyze(bot, robot, data, team_name);
    }
 }
 
 /* for testing now... */
-function getServerUrl(bot, robot, data, team_name)
+function commandAnalyze(bot, robot, data, team_name)
 {
-	var command = /(.*)\s(url)/;
+	var command = /(.*)\s(.*)\s(.*)/;
 	var result = data.text.match(command);
 	console.log(result);
-	var intent = result[1];
-	if(intent != null)
+	// 1. eureka or jenkins, we use "service"
+	// 2. what user want, we use "intent"
+	var service = result[1];
+	if(service != null)
 	{
-		switch(intent)
+		switch(service)
 		{
-			case "eureka":bot.postMessage(data.channel, "Your Eureka Server URL is : " + MSABot.getEureka(bot));break;
-			case "jenkins":bot.postMessage(data.channel, "Your Jenkins Server URL is : " + MSABot.getJenkins(bot));break;
+			case "eureka":
+				var intent = result[2];
+				if(intent != null)
+				{
+					switch(intent)
+					{
+						case "url":
+							bot.postMessage(data.channel, "Your Eureka Server URL is : " + MSABot.getEureka(bot));break;
+						case "set":
+							MSABot.setEureka(robot, bot, data.channel, result[3]);break;
+					}
+				}
+			case "jenkins":
+				var intent = result[2];
+				if(intent != null)
+				{
+					switch(intent)
+					{
+						case "url":
+							bot.postMessage(data.channel, "Your Jenkins Server URL is : " + MSABot.getJenkins(bot));break;
+						case "set":
+							MSABot.setJenkins(robot, bot, data.channel, result[3]);
+					}
+				}
 		}
 	}
-}
-
-/* eureka server setting */
-function eurekaSetting(bot, robot, data, team_name)
-{
-	var command = /(eureka)\s(set)\s(.*)/;
-    var result = data.text.match(command);
-	console.log(result);
-	var eureka = result[1];
-	var intent = result[2];
-	var url = result[3];
-    if(eureka != null)
-    {
-		MSABot.setEureka(robot, bot, data.channel, url);
-    }
-}
-
-/* jenkins setting */
-function jenkinsSetting(bot, robot, data, team_name)
-{
-	var command = /(jenkins)\s(set)\s(.*)/;
-    var result = data.text.match(command);
-	console.log(result);
-	var intent = result[2];
-	var url = result[3];
-    if(result[1] != null)
-    {
-        MSABot.setJenkins(robot, bot, data.channel, url);
-    }
 }
 
 /* If mention then do something*/
