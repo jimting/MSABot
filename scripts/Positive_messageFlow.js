@@ -14,7 +14,7 @@ exports.hubotAnalyze =  function(bot, robot, data, team_name)
 /* for testing now... */
 function commandAnalyze(bot, robot, data, team_name)
 {
-	var command = /(.*)\s(.*)\s(.*)?/;
+	var command = /(.*)\s(.*)\s(.*?)/;
 	var result = data.text.match(command);
 	console.log(result);
 	var bot_in_brain = MSABot.getBot(robot, bot);
@@ -32,7 +32,7 @@ function commandAnalyze(bot, robot, data, team_name)
 					switch(intent)
 					{
 						case "url":
-							bot.postMessage(data.channel, "Your Eureka Server URL is : " + MSABot.getEureka(bot_in_brain));break;
+							bot.postMessage(data.channel, "Your Eureka Server URL is : " + MSABot.getEureka(bot_in_brain, data.channel));break;
 						case "set":
 							MSABot.setEureka(robot, bot_in_brain, data.channel, result[3]);break;
 					}
@@ -45,7 +45,7 @@ function commandAnalyze(bot, robot, data, team_name)
 					switch(intent)
 					{
 						case "url":
-							bot.postMessage(data.channel, "Your Jenkins Server URL is : " + MSABot.getJenkins(bot_in_brain));break;
+							bot.postMessage(data.channel, "Your Jenkins Server URL is : " + MSABot.getJenkins(bot_in_brain, data.channel));break;
 						case "set":
 							MSABot.setJenkins(robot, bot_in_brain, data.channel, result[3]);
 					}
