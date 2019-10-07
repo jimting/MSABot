@@ -17,7 +17,7 @@ function eureka(bot, robot, data, team_name)
     var result = data.text.match(command);
     if(result != null)
     {
-        robot.send(admin_data,result);
+        console.log(result);
     }
 }
 
