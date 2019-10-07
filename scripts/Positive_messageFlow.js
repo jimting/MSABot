@@ -18,6 +18,7 @@ function getServerUrl(bot, robot, data, team_name)
 {
 	var command = /(.*)\s(url)/;
 	var result = data.text.match(command);
+	console.log(result);
 	var intent = result[1];
 	if(intent != null)
 	{
@@ -34,6 +35,7 @@ function eurekaSetting(bot, robot, data, team_name)
 {
 	var command = /(eureka)\s(set)\s(.*)/;
     var result = data.text.match(command);
+	console.log(result);
 	var eureka = result[1];
 	var intent = result[2];
 	var url = result[3];
@@ -48,10 +50,10 @@ function jenkinsSetting(bot, robot, data, team_name)
 {
 	var command = /(jenkins)\s(set)\s(.*)/;
     var result = data.text.match(command);
-	var jenkins = result[1];
+	console.log(result);
 	var intent = result[2];
 	var url = result[3];
-    if(jenkins != null)
+    if(result[1] != null)
     {
         MSABot.setJenkins(robot, bot, data.channel, url);
     }
