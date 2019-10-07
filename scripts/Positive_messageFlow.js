@@ -46,7 +46,7 @@ function eurekaSetting(bot, robot, data, team_name)
 /* jenkins setting */
 function jenkinsSetting(bot, robot, data, team_name)
 {
-	var command = /(jenkins\s(set)\s(.*)/;
+	var command = /(jenkins)\s(set)\s(.*)/;
     var result = data.text.match(command);
 	var jenkins = result[1];
 	var intent = result[2];
