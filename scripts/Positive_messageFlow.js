@@ -17,6 +17,7 @@ function commandAnalyze(bot, robot, data, team_name)
 	var command = /(.*)\s(.*)\s(.*)/;
 	var result = data.text.match(command);
 	console.log(result);
+	var bot_in_brain = MSABot.getBot(robot, bot);
 	// 1. eureka or jenkins, we use "service"
 	// 2. what user want, we use "intent"
 	var service = result[1];
@@ -31,9 +32,9 @@ function commandAnalyze(bot, robot, data, team_name)
 					switch(intent)
 					{
 						case "url":
-							bot.postMessage(data.channel, "Your Eureka Server URL is : " + MSABot.getEureka(bot));break;
+							bot.postMessage(data.channel, "Your Eureka Server URL is : " + MSABot.getEureka(bot_in_brain));break;
 						case "set":
-							MSABot.setEureka(robot, bot, data.channel, result[3]);break;
+							MSABot.setEureka(robot, bot_in_brain, data.channel, result[3]);break;
 					}
 				}
 				break;
@@ -44,9 +45,9 @@ function commandAnalyze(bot, robot, data, team_name)
 					switch(intent)
 					{
 						case "url":
-							bot.postMessage(data.channel, "Your Jenkins Server URL is : " + MSABot.getJenkins(bot));break;
+							bot.postMessage(data.channel, "Your Jenkins Server URL is : " + MSABot.getJenkins(bot_in_brain));break;
 						case "set":
-							MSABot.setJenkins(robot, bot, data.channel, result[3]);
+							MSABot.setJenkins(robot, bot_in_brain, data.channel, result[3]);
 					}
 				}
 				break;

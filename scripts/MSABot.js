@@ -32,6 +32,10 @@ exports.getJenkins =  function(bot)
    return getJenkins(bot);
 }
 
+exports.getBot =  function(robot, bot)
+{
+   return getBot(robot, bot);
+}
 
 var initBot = function(robot)
 {
@@ -250,3 +254,17 @@ var getJenkins = function(bot, channel)
 	return null;
 }
 
+var getBot = function(robot, bot)
+{
+	var bots = robot.brain.get('bots');
+    if(bots == null)
+		bots = [];
+	for(var i = 0;i < bots.length; i++)
+	{
+		if(bots[i].data.team_name == bot.team.name)
+		{
+			return bots[i];
+		}
+	}
+	return null;
+}
