@@ -1,5 +1,5 @@
 var admin_data = { "room": process.env.adminRoom, "user_id": process.env.adminID};
-var MongoClient = require('mongodb').MongoClient;
+var MongoClient = require('mongodb');
 var userDB = process.env.UserDB;
 
 exports.initBot =  function(robot)
@@ -160,20 +160,19 @@ var setEureka = function(robot, bot, channel, url)
 	MongoClient.connect(userDB, { useNewUrlParser: false }, function(err, db) {
         if (err) throw err;
 		var data = bot.data;
-		console.log(bot);
 		var eureka = data.eureka;
 		//remove old data
-		for(var i = 0; i < eureka.length; i++)
+		for(var i = 0; i < data.eureka.length; i++)
 		{
-			if(eureka.channel == channel)
+			if(data.eureka.channel == channel)
 			{
-				eureka.remove(i);
+				data.eureka.remove(i);
 				break;
 			}
 		}
 		
-		eureka.push({"channel":channel,"url":url});
-		data.eureka = eureka;
+		data.eureka.push({"channel":channel,"url":url});
+		
         var dbo = db.db("apuser"); 
 		var myquery = {team_name: bot.data.team_name};
 		var newvalues = { $set: {eureka:eureka} };
@@ -187,19 +186,18 @@ var setJenkins = function(robot, bot, channel, url)
 	MongoClient.connect(userDB, { useNewUrlParser: false }, function(err, db) {
         if (err) throw err;
 		var data = bot.data;
-		var jenkins = data.jenkins;
 		//remove old data
-		for(var i = 0; i < jenkins.length; i++)
+		for(var i = 0; i < data.jenkins.length; i++)
 		{
-			if(jenkins.channel == channel)
+			if(data.jenkins.channel == channel)
 			{
-				jenkins.remove(i);
+				data.jenkins.remove(i);
 				break;
 			}
 		}
 		
-		jenkins.push({"channel":channel,"url":url});
-		data.jenkins = jenkins;
+		data.jenkins.push({"channel":channel,"url":url});
+		
         var dbo = db.db("apuser"); 
 		var myquery = {team_name: bot.data.team_name};
 		var newvalues = { $set: {jenkins:jenkins} };
