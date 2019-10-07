@@ -1,5 +1,5 @@
 var admin_data = { "room": process.env.adminRoom, "user_id": process.env.adminID};
-var MongoClient = require('mongodb');
+var MongoClient = require('mongodb').MongoClient;
 var userDB = process.env.UserDB;
 
 exports.initBot =  function(robot)
@@ -176,8 +176,9 @@ var setEureka = function(robot, bot, channel, url)
         var dbo = db.db("apuser"); 
 		var myquery = {team_name: bot.data.team_name};
 		var newvalues = { $set: {eureka:eureka} };
-		dbo.collection.updateOne(myquery, newvalues ,{upsert: true});
+		dbo.collection("apuser").updateOne(myquery, newvalues ,{upsert: true});
 		renewBotData(robot, data);
+		db.close();
     }); 
 }
 
@@ -201,8 +202,9 @@ var setJenkins = function(robot, bot, channel, url)
         var dbo = db.db("apuser"); 
 		var myquery = {team_name: bot.data.team_name};
 		var newvalues = { $set: {jenkins:jenkins} };
-		dbo.collection.updateOne(myquery, newvalues, {upsert: true});
+		dbo.collection("apuser").updateOne(myquery, newvalues, {upsert: true});
 		renewBotData(robot, data);
+		db.close();
     }); 
 }
 
