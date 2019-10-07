@@ -163,7 +163,7 @@ var setEureka = function(robot, bot, channel, url)
 		//remove old data
 		for(var i = 0; i < data.eureka.length; i++)
 		{
-			if(data.eureka.channel == channel)
+			if(data.eureka[i].channel == channel)
 			{
 				data.eureka.splice(i, 1);
 				break;
@@ -189,7 +189,7 @@ var setJenkins = function(robot, bot, channel, url)
 		//remove old data
 		for(var i = 0; i < data.jenkins.length; i++)
 		{
-			if(data.jenkins.channel == channel)
+			if(data.jenkins[i].channel == channel)
 			{
 				data.jenkins.splice(i, 1);
 				break;
