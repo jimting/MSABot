@@ -1,24 +1,33 @@
 var admin_data = { "room": process.env.adminRoom, "user_id": process.env.adminID};
-		
-exports.init_bot =  function(robot)
+var MongoClient = require('mongodb').MongoClient;
+var userDB = process.env.UserDB;
+
+exports.initBot =  function(robot)
 {
-   init_bot(robot);
+   initBot(robot);
 }
 
-exports.reset_bot =  function(robot)
+exports.resetBot =  function(robot)
 {
-   reset_bot(robot);
+   resetBot(robot);
 }
 
+exports.setEureka =  function(robot, bot, channel, url)
+{
+   setEureka(robot, bot, channel, url);
+}
 
-var init_bot = function(robot)
+exports.setJenkins =  function(robot, bot, channel, url)
+{
+   setJenkins(robot, bot, channel, url);
+}
+
+var initBot = function(robot)
 {
     //get all bot data from mongodb
     var botData = [];
-    var MongoClient = require('mongodb').MongoClient;
-    var url = process.env.UserDB;
     robot.send(admin_data,"(Bots Connecting)Bots' initial start.");
-    MongoClient.connect(url, { useNewUrlParser: false }, function(err, db) {
+    MongoClient.connect(userDB, { useNewUrlParser: false }, function(err, db) {
         if (err) throw err;
         var dbo = db.db("apuser");
         dbo.collection("apuser").find({}).toArray(function(err, result) {
@@ -33,8 +42,12 @@ var init_bot = function(robot)
                 var auth = botData[i].access_token;
                 var name = "MSABot";
                 var team = botData[i].team_name;
+				// the json
+				var eureka = botData[i].eureka;
+				var jenkins = botData[i].jenkins;
+				
                 // create a bot
-                var bot = new_bot(token, name, robot, team);
+                var bot = newBot(token, name, robot, team);
                 var tempBot = {bot:bot, token:token, name:name, data:botData[i]};
                 bots.push(tempBot);
             }
@@ -47,7 +60,7 @@ var init_bot = function(robot)
     }); 
 }
 
-var new_bot = function(token, name, robot, team_name)
+var newBot = function(token, name, robot, team_name)
 {
     var hubotAnalyze = require('./Positive_messageFlow').hubotAnalyze;
     var SlackBot = require('slackbots');
@@ -80,7 +93,7 @@ var new_bot = function(token, name, robot, team_name)
     });
     bot.on('close', function(data) 
     {
-        reset_bot(robot);
+        resetBot(robot);
     });
     bot.on('error', function(data) 
     {
@@ -90,7 +103,7 @@ var new_bot = function(token, name, robot, team_name)
     return bot;
 }
 
-var reset_bot = function(robot)
+var resetBot = function(robot)
 {
     var reset_check = robot.brain.get('reset_check');
     if(reset_check == "0")
@@ -108,7 +121,7 @@ var reset_bot = function(robot)
                 //一個一個更新
                 robot.send(admin_data,"("+bots[i].data.team_name+")The bot will reconnect to RTM.");
                 //console.log(bots[i].bot.ws);
-                bots[i].bot = new_bot(bots[i].data.bot_access_token, "APMessengerBot", robot, bots[i].data.team_name);
+                bots[i].bot = newBot(bots[i].data.bot_access_token, "APMessengerBot", robot, bots[i].data.team_name);
             }
             else
             {
@@ -116,7 +129,7 @@ var reset_bot = function(robot)
             }
         }
         //robot.brain.set("bots", []);
-        //init_bot(robot);
+        //initBot(robot);
         setTimeout(function(){ setResetCheck0(robot)}, 5000);
     }
 }
@@ -126,3 +139,74 @@ var setResetCheck0 = function(robot)
     robot.brain.set('reset_check', 0);
     robot.send(admin_data,"All resettings are done.");
 }
+
+var setEureka = function(robot, bot, channel, url)
+{
+	MongoClient.connect(userDB, { useNewUrlParser: false }, function(err, db) {
+        if (err) throw err;
+		var data = bot.data;
+		
+		//remove old data
+		for(var i = 0; i < data.eureka.length; i++)
+		{
+			if(data.eureka.channel == channel)
+			{
+				data.eureka.remove(i);
+				break;
+			}
+		}
+		
+		data.eureka.push({"channel":channel,"url":url});
+        var dbo = db.db("apuser"); 
+		db.collection.update({'team_name': bot.data.team_name}, 
+							{//put whatever you want to insert
+								eureka:data.eureka
+							},
+							{upsert: true});
+		renewBotData(robot, data);
+    }); 
+}
+
+var setJenkins = function(robot, bot, channel, url)
+{
+	MongoClient.connect(userDB, { useNewUrlParser: false }, function(err, db) {
+        if (err) throw err;
+		var data = bot.data;
+		
+		//remove old data
+		for(var i = 0; i < data.jenkins.length; i++)
+		{
+			if(data.jenkins.channel == channel)
+			{
+				data.jenkins.remove(i);
+				break;
+			}
+		}
+		
+		data.jenkins.push({"channel":channel,"url":url});
+        var dbo = db.db("apuser"); 
+		db.collection.update({'team_name': bot.data.team_name}, 
+							{//put whatever you want to insert
+								jenkins:data.jenkins
+							},
+							{upsert: true});
+		renewBotData(robot, data);
+    }); 
+}
+
+var renewBotData = function(robot, data)
+{
+	var bots = robot.brain.get('bots');
+    if(bots == null)
+		bots = [];
+	for(var i = 0;i < bots.length; i++)
+	{
+		if(bots[i].data.team_name == data.team_name)
+		{
+			bots[i].data = data;
+			break;
+		}
+	}
+	robot.brain.set("bots", bots);
+}
+

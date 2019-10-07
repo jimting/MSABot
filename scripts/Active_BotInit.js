@@ -4,5 +4,5 @@
 module.exports = function(robot) 
 {
     var bot = require('./MSABot');
-    bot.init_bot(robot);
+    bot.initBot(robot);
 }

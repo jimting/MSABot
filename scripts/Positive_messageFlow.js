@@ -2,7 +2,34 @@ var admin_data = { "room": process.env.adminRoom, "user_id": process.env.adminID
 exports.hubotAnalyze =  function(bot, robot, data, team_name)
 {
    console.log(data);
-   mentionAndAnalyze(bot, robot, data, team_name);
+   //if not mention user, means that user may use the setting func.
+   if(!mentionAndAnalyze(bot, robot, data, team_name))
+   {
+	   eureka(bot, robot, data, team_name);
+	   jenkins(bot, robot, data, team_name);
+   }
+}
+
+/* eureka server setting */
+function eureka(bot, robot, data, team_name)
+{
+	var command = /(eureka set)\s(.*)/;
+    var result = data.text.match(command);
+    if(result != null)
+    {
+        console.log(result);
+    }
+}
+
+/* jenkins setting */
+function jenkins(bot, robot, data, team_name)
+{
+	var command = /(jenkins set)\s(.*)/;
+    var result = data.text.match(command);
+    if(result != null)
+    {
+        console.log(result);
+    }
 }
 
 /* If mention then do something*/
@@ -13,13 +40,18 @@ function mentionAndAnalyze(bot, robot, data, team_name)
     if(result != null)
     {
 		stage0(bot, robot, data, team_name);
+		return true;
     }
+	else
+		return false;
 }
 
+/*===================================*/
 // stage 0 : if analyze no intent, ask the intent, if have, go stage1
 // stage 1 : analyze the intent result, if have service name, skip stage2 to mission
 // stage 2 : if lack service name, ask service name.
 // stage 3 : mission.
+/*===================================*/
 
 /* send request and check if result has intent */
 function stage0(bot, robot, data, team_name)
@@ -76,7 +108,7 @@ function stage0(bot, robot, data, team_name)
 	});
 }
 
-/*check if the result has service name*/
+/*check if the result has service name */
 function stage1(bot, robot, data, team_name, service, intent)
 {
 	// setting the stage and intent first.
@@ -100,6 +132,7 @@ function stage1(bot, robot, data, team_name, service, intent)
 	}
 }
 
+/* to ask user what service he/she wants */
 function stage2(bot, robot, data, team_name, intent)
 {
 	// setting the stage first.
@@ -120,6 +153,7 @@ function stage2(bot, robot, data, team_name, intent)
 	//end the flow
 }
 
+/* send service's health data to user */
 function action_service_health(bot, robot, data, team_name, service)
 {
 	// setting the stage first.
@@ -140,6 +174,7 @@ function action_service_health(bot, robot, data, team_name, service)
     });
 }
 
+/* send service's info to user */
 function action_service_info(bot, robot, data, team_name, service)
 {
 	// setting the stage first.
@@ -149,6 +184,7 @@ function action_service_info(bot, robot, data, team_name, service)
 	robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the service information successfully!");
 }
 
+/* send service's using_info to user */
 function action_service_using_info(bot, robot, data, team_name, service)
 {
 	// setting the stage first.
@@ -158,6 +194,7 @@ function action_service_using_info(bot, robot, data, team_name, service)
 	robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the service overview successfully!");
 }
 
+/* send service's api list to user */
 function action_service_api_list(bot, robot, data, team_name, service)
 {
 	// setting the stage first.
@@ -167,6 +204,7 @@ function action_service_api_list(bot, robot, data, team_name, service)
 	robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the service api list successfully!");
 }
 
+/* send the env setting data to user */
 function action_service_env(bot, robot, data, team_name, service)
 {
 	// setting the stage first.

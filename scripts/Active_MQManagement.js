@@ -10,7 +10,11 @@ module.exports = function(robot)
     sub.on('data', function(note) {
         var botData = JSON.parse(note);
         robot.send(admin_data,"There're new user installing your Bot! : "+botData.team_name);
-        newBot(botData, robot);
+		var bot = require('./MSABot');
+		var token = botData.bot_access_token;
+		var name = "MSABot";
+		var team = botData.team_name;
+		bot.newBot(token, name, robot, team_name);
     });
 	
 	/*########## for Jenkins server ##########*/
@@ -41,54 +45,6 @@ module.exports = function(robot)
         }
     });
 }
-
-function newBot(botData, robot){
-    var hubotAnalyze = require('./hubotAnalyze').hubotAnalyze;
-    var SlackBot = require('slackbots');
-    var token = botData.bot_access_token;
-    var auth = botData.access_token;
-    var name = "APMessengerBot";
-    var team = botData.team_name;
-    // create a bot
-    console.log(token);
-    var bot = new SlackBot({
-        token: token, // Add a bot https://my.slack.com/services/new/bot and put the token 
-        name: name
-    });
-    var tempBot = {bot:bot, token:token, name:name, data:botData};
-    var bots = robot.brain.get('bots');
-    if(bots == null)
-        bots = [];
-    bots.push(tempBot);
-    robot.brain.set("bots", bots);
-    console.log(bots);
-
-    bot.on('message', function(data) 
-    {
-        var team_name = team;
-        if(data.type!="error")
-        console.log(data);
-        if(data.type=="message")
-        {
-            if(data.subtype!='bot_message' && data.bot_id==null)
-            {
-                //先找出這個訊息是哪個group收到的，找出列表中的位置，目前只能一個一個檢查QAQ
-                var bots = robot.brain.get('bots');
-                for(var k = 0;k < bots.length;k++)
-                {
-                    if(data.team == bots[k].data.team_id)
-                    {
-                        robot.send(admin_data,"("+bots[k].data.team_name+")Has new activity :");
-                        hubotAnalyze(bots[k].bot, robot, data, bots[k].data.team_name);
-                    }
-                }
-            }
-        }
-
-    });
-}
-
-
 
 
 

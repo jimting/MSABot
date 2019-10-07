@@ -53,7 +53,6 @@ module.exports = function(robot) {
     {
         var bot = require('./MSABot');
         //response.send("收到！開始重啟機器人！");
-        bot.reset_bot(robot);
+        bot.resetBot(robot);
     });
-
 }
