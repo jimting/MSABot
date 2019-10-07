@@ -32,7 +32,12 @@ function commandAnalyze(bot, robot, data, team_name)
 					switch(intent)
 					{
 						case "url":
-							bot.postMessage(data.channel, "Your Eureka Server URL is : " + MSABot.getEureka(bot_in_brain, data.channel));break;
+							var url = MSABot.getEureka(bot_in_brain, data.channel);
+							if(url != null)
+								bot.postMessage(data.channel, "The channel's Eureka Server URL is : " + url);
+							else
+								bot.postMessage(data.channel, "This channel doesn't set the Eureka Server Url.");
+							break;
 						case "set":
 							MSABot.setEureka(robot, bot_in_brain, data.channel, result[3]);
 							bot.postMessage(data.channel, "Successfully setting the Eureka server.");
@@ -47,7 +52,11 @@ function commandAnalyze(bot, robot, data, team_name)
 					switch(intent)
 					{
 						case "url":
-							bot.postMessage(data.channel, "Your Jenkins Server URL is : " + MSABot.getJenkins(bot_in_brain, data.channel));
+							var url = MSABot.getJenkins(bot_in_brain, data.channel);
+							if(url != null)
+								bot.postMessage(data.channel, "The channel's Jenkins Server URL is : " + url);
+							else
+								bot.postMessage(data.channel, "This channel doesn't set the Jenkins Server Url.");
 							break;
 						case "set":
 							MSABot.setJenkins(robot, bot_in_brain, data.channel, result[3]);

@@ -165,7 +165,7 @@ var setEureka = function(robot, bot, channel, url)
 		{
 			if(data.eureka.channel == channel)
 			{
-				data.eureka.remove(i);
+				data.eureka.splice(i, 1);
 				break;
 			}
 		}
@@ -191,7 +191,7 @@ var setJenkins = function(robot, bot, channel, url)
 		{
 			if(data.jenkins.channel == channel)
 			{
-				data.jenkins.remove(i);
+				data.jenkins.splice(i, 1);
 				break;
 			}
 		}
