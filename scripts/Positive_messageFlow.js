@@ -13,11 +13,11 @@ exports.hubotAnalyze =  function(bot, robot, data, team_name)
 /* eureka server setting */
 function eureka(bot, robot, data, team_name)
 {
-	var command = /(eureka set)\s(.*)/;
+	var command = /(eureka)\s(set)\s(.*)/;
     var result = data.text.match(command);
     if(result != null)
     {
-        console.log(result);
+        robot.send(admin_data,result);
     }
 }
 
