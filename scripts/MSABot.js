@@ -156,8 +156,7 @@ var setEureka = function(robot, bot, channel, url)
 	MongoClient.connect(userDB, { useNewUrlParser: false }, function(err, db) {
         if (err) throw err;
 		var data = bot.data;
-		if(!data.hasOwnProperty('eureka'))
-			data.eureka = [];
+		
 		//remove old data
 		for(var i = 0; i < data.eureka.length; i++)
 		{
@@ -185,8 +184,6 @@ var setJenkins = function(robot, bot, channel, url)
         if (err) throw err;
 		var data = bot.data;
 		
-		if(!data.hasOwnProperty('jenkins'))
-			data.jenkins = [];
 		//remove old data
 		for(var i = 0; i < data.jenkins.length; i++)
 		{
