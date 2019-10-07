@@ -175,11 +175,9 @@ var setEureka = function(robot, bot, channel, url)
 		eureka.push({"channel":channel,"url":url});
 		data.eureka = eureka;
         var dbo = db.db("apuser"); 
-		dbo.collection.updateOne({'team_name': bot.data.team_name}, 
-							{//put whatever you want to insert
-								eureka:eureka
-							},
-							{upsert: true});
+		var myquery = {'team_name': bot.data.team_name};
+		var newvalues = { $set: {eureka:eureka} };
+		dbo.collection.updateOne(myquery, newvalues);
 		renewBotData(robot, data);
     }); 
 }
@@ -203,11 +201,9 @@ var setJenkins = function(robot, bot, channel, url)
 		jenkins.push({"channel":channel,"url":url});
 		data.jenkins = jenkins;
         var dbo = db.db("apuser"); 
-		dbo.collection.updateOne({'team_name': bot.data.team_name}, 
-							{//put whatever you want to insert
-								jenkins:jenkins
-							},
-							{upsert: true});
+		var myquery = {'team_name': bot.data.team_name};
+		var newvalues = { $set: {jenkins:jenkins} };
+		dbo.collection.updateOne(myquery, newvalues);
 		renewBotData(robot, data);
     }); 
 }
