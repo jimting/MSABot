@@ -11,7 +11,7 @@ exports.hubotAnalyze =  function(bot, robot, data, team_name)
    }
 }
 
-/* for testing now... */
+/* setting the  */
 function commandAnalyze(bot, robot, data, team_name)
 {
 	var command = /(.*)\s(.*)\s?(.*?)/;
@@ -34,7 +34,9 @@ function commandAnalyze(bot, robot, data, team_name)
 						case "url":
 							bot.postMessage(data.channel, "Your Eureka Server URL is : " + MSABot.getEureka(bot_in_brain, data.channel));break;
 						case "set":
-							MSABot.setEureka(robot, bot_in_brain, data.channel, result[3]);break;
+							MSABot.setEureka(robot, bot_in_brain, data.channel, result[3]);
+							bot.postMessage(data.channel, "Successfully setting the Eureka server.");
+							break;
 					}
 				}
 				break;
@@ -45,9 +47,12 @@ function commandAnalyze(bot, robot, data, team_name)
 					switch(intent)
 					{
 						case "url":
-							bot.postMessage(data.channel, "Your Jenkins Server URL is : " + MSABot.getJenkins(bot_in_brain, data.channel));break;
+							bot.postMessage(data.channel, "Your Jenkins Server URL is : " + MSABot.getJenkins(bot_in_brain, data.channel));
+							break;
 						case "set":
 							MSABot.setJenkins(robot, bot_in_brain, data.channel, result[3]);
+							bot.postMessage(data.channel, "Successfully setting the Jenkins server.");
+							break;
 					}
 				}
 				break;
@@ -138,6 +143,14 @@ function stage1(bot, robot, data, team_name, service, intent)
 	robot.brain.set("stage"+data.channel, 1);
 	robot.brain.set("intent"+data.channel, intent);
 	
+	/* intents that don't need the service name */
+	switch(intent)
+	{
+		case "action_service_env"		:action_service_env(bot, robot, data, team_name, service);break;
+			
+	}
+	
+	
 	if(service=="none" || service==null)
 	{
 		stage2(bot, robot, data, team_name, intent);
@@ -150,7 +163,7 @@ function stage1(bot, robot, data, team_name, service, intent)
 			case "action_service_info"		:action_service_info(bot, robot, data, team_name, service);break;
 			case "action_service_using_info":action_service_using_info(bot, robot, data, team_name, service);break;
 			case "action_service_api_list"	:action_service_api_list(bot, robot, data, team_name, service);break;
-			case "action_service_env"		:action_service_env(bot, robot, data, team_name, service);break;
+			case "action_detail_api"		:action_detail_api();break;
 		}
 	}
 }

@@ -160,7 +160,6 @@ var setEureka = function(robot, bot, channel, url)
 	MongoClient.connect(userDB, { useNewUrlParser: false }, function(err, db) {
         if (err) throw err;
 		var data = bot.data;
-		var eureka = data.eureka;
 		//remove old data
 		for(var i = 0; i < data.eureka.length; i++)
 		{
@@ -175,7 +174,7 @@ var setEureka = function(robot, bot, channel, url)
 		
         var dbo = db.db("apuser"); 
 		var myquery = {team_name: bot.data.team_name};
-		var newvalues = { $set: {eureka:eureka} };
+		var newvalues = { $set: {eureka:data.eureka} };
 		dbo.collection("apuser").updateOne(myquery, newvalues ,{upsert: true});
 		renewBotData(robot, data);
 		db.close();
@@ -201,7 +200,7 @@ var setJenkins = function(robot, bot, channel, url)
 		
         var dbo = db.db("apuser"); 
 		var myquery = {team_name: bot.data.team_name};
-		var newvalues = { $set: {jenkins:jenkins} };
+		var newvalues = { $set: {jenkins:data.jenkins} };
 		dbo.collection("apuser").updateOne(myquery, newvalues, {upsert: true});
 		renewBotData(robot, data);
 		db.close();
