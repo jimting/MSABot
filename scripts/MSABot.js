@@ -22,14 +22,14 @@ exports.setJenkins =  function(robot, bot, channel, url)
    setJenkins(robot, bot, channel, url);
 }
 
-exports.getEureka =  function(bot)
+exports.getEureka =  function(bot, channel)
 {
-   return getEureka(bot);
+   return getEureka(bot, channel);
 }
 
-exports.getJenkins =  function(bot)
+exports.getJenkins =  function(bot, channel)
 {
-   return getJenkins(bot);
+   return getJenkins(bot, channel);
 }
 
 exports.getBot =  function(robot, bot)
