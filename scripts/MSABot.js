@@ -156,22 +156,23 @@ var setEureka = function(robot, bot, channel, url)
 	MongoClient.connect(userDB, { useNewUrlParser: false }, function(err, db) {
         if (err) throw err;
 		var data = bot.data;
-		
+		var eureka = data.eureka;
 		//remove old data
-		for(var i = 0; i < data.eureka.length; i++)
+		for(var i = 0; i < eureka.length; i++)
 		{
-			if(data.eureka.channel == channel)
+			if(eureka.channel == channel)
 			{
-				data.eureka.remove(i);
+				eureka.remove(i);
 				break;
 			}
 		}
 		
-		data.eureka.push({"channel":channel,"url":url});
+		eureka.push({"channel":channel,"url":url});
+		data.eureka = eureka;
         var dbo = db.db("apuser"); 
 		db.collection.update({'team_name': bot.data.team_name}, 
 							{//put whatever you want to insert
-								eureka:data.eureka
+								eureka:eureka
 							},
 							{upsert: true});
 		renewBotData(robot, data);
@@ -183,22 +184,23 @@ var setJenkins = function(robot, bot, channel, url)
 	MongoClient.connect(userDB, { useNewUrlParser: false }, function(err, db) {
         if (err) throw err;
 		var data = bot.data;
-		
+		var jenkins = data.jenkins;
 		//remove old data
-		for(var i = 0; i < data.jenkins.length; i++)
+		for(var i = 0; i < jenkins.length; i++)
 		{
-			if(data.jenkins.channel == channel)
+			if(jenkins.channel == channel)
 			{
-				data.jenkins.remove(i);
+				jenkins.remove(i);
 				break;
 			}
 		}
 		
-		data.jenkins.push({"channel":channel,"url":url});
+		jenkins.push({"channel":channel,"url":url});
+		data.jenkins = jenkins;
         var dbo = db.db("apuser"); 
 		db.collection.update({'team_name': bot.data.team_name}, 
 							{//put whatever you want to insert
-								jenkins:data.jenkins
+								jenkins:jenkins
 							},
 							{upsert: true});
 		renewBotData(robot, data);
