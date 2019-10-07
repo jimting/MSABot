@@ -156,7 +156,7 @@ var setEureka = function(robot, bot, channel, url)
 	MongoClient.connect(userDB, { useNewUrlParser: false }, function(err, db) {
         if (err) throw err;
 		var data = bot.data;
-		console.log(data);
+		console.log(bot);
 		var eureka = data.eureka;
 		//remove old data
 		for(var i = 0; i < eureka.length; i++)

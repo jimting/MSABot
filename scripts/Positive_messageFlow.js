@@ -36,6 +36,7 @@ function commandAnalyze(bot, robot, data, team_name)
 							MSABot.setEureka(robot, bot, data.channel, result[3]);break;
 					}
 				}
+				break;
 			case "jenkins":
 				var intent = result[2];
 				if(intent != null)
@@ -48,6 +49,7 @@ function commandAnalyze(bot, robot, data, team_name)
 							MSABot.setJenkins(robot, bot, data.channel, result[3]);
 					}
 				}
+				break;
 		}
 	}
 }
