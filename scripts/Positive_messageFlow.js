@@ -1,34 +1,59 @@
 var admin_data = { "room": process.env.adminRoom, "user_id": process.env.adminID};
+var MSABot = require('./MSABot');
+
 exports.hubotAnalyze =  function(bot, robot, data, team_name)
 {
    console.log(data);
    //if not mention user, means that user may use the setting func.
    if(!mentionAndAnalyze(bot, robot, data, team_name))
    {
-	   eureka(bot, robot, data, team_name);
-	   jenkins(bot, robot, data, team_name);
+	   eurekaSetting(bot, robot, data, team_name);
+	   jenkinsSetting(bot, robot, data, team_name);
+	   getServerUrl(bot, robot, data, team_name);
    }
 }
 
+/* for testing now... */
+function getServerUrl(bot, robot, data, team_name)
+{
+	var command = /(.*)\s(url)/;
+	var result = data.text.match(command);
+	var intent = result[1];
+	if(intent != null)
+	{
+		switch(intent)
+		{
+			case "eureka":bot.postMessage(data.channel, "Your Eureka Server URL is : " + MSABot.getEureka(bot));break;
+			case "jenkins":bot.postMessage(data.channel, "Your Jenkins Server URL is : " + MSABot.getJenkins(bot));break;
+		}
+	}
+}
+
 /* eureka server setting */
-function eureka(bot, robot, data, team_name)
+function eurekaSetting(bot, robot, data, team_name)
 {
 	var command = /(eureka)\s(set)\s(.*)/;
     var result = data.text.match(command);
-    if(result != null)
+	var eureka = result[1];
+	var intent = result[2];
+	var url = result[3];
+    if(eureka != null)
     {
-        console.log(result);
+		MSABot.setEureka(robot, bot, data.channel, url);
     }
 }
 
 /* jenkins setting */
-function jenkins(bot, robot, data, team_name)
+function jenkinsSetting(bot, robot, data, team_name)
 {
-	var command = /(jenkins set)\s(.*)/;
+	var command = /(jenkins\s(set)\s(.*)/;
     var result = data.text.match(command);
-    if(result != null)
+	var jenkins = result[1];
+	var intent = result[2];
+	var url = result[3];
+    if(jenkins != null)
     {
-        console.log(result);
+        MSABot.setJenkins(robot, bot, data.channel, url);
     }
 }
 

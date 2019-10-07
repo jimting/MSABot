@@ -22,6 +22,17 @@ exports.setJenkins =  function(robot, bot, channel, url)
    setJenkins(robot, bot, channel, url);
 }
 
+exports.getEureka =  function(bot)
+{
+   return getEureka(bot);
+}
+
+exports.getJenkins =  function(bot)
+{
+   return getJenkins(bot);
+}
+
+
 var initBot = function(robot)
 {
     //get all bot data from mongodb
@@ -208,5 +219,31 @@ var renewBotData = function(robot, data)
 		}
 	}
 	robot.brain.set("bots", bots);
+}
+
+var getEureka = function(bot, channel)
+{
+	var eureka = bot.data.eureka
+	for(var i = 0;i < eureka.length; i++)
+	{
+		if(eureka[i].channel == channel)
+		{
+			return eureka[i];
+		}
+	}
+	return null;
+}
+
+var getJenkins = function(bot, channel)
+{
+	var jenkins = bot.data.jenkins
+	for(var i = 0;i < jenkins.length; i++)
+	{
+		if(jenkins[i].channel == channel)
+		{
+			return jenkins[i];
+		}
+	}
+	return null;
 }
 
