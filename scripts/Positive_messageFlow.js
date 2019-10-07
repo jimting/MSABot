@@ -14,7 +14,7 @@ exports.hubotAnalyze =  function(bot, robot, data, team_name)
 /* for testing now... */
 function commandAnalyze(bot, robot, data, team_name)
 {
-	var command = /(.*)\s(.*)\s(.*?)/;
+	var command = /(.*)\s(.*)\s?(.*?)/;
 	var result = data.text.match(command);
 	console.log(result);
 	var bot_in_brain = MSABot.getBot(robot, bot);

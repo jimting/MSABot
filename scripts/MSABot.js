@@ -231,7 +231,7 @@ var getEureka = function(bot, channel)
 	{
 		if(eureka[i].channel == channel)
 		{
-			return eureka[i];
+			return eureka[i].url;
 		}
 	}
 	return null;
@@ -244,7 +244,7 @@ var getJenkins = function(bot, channel)
 	{
 		if(jenkins[i].channel == channel)
 		{
-			return jenkins[i];
+			return jenkins[i].url;
 		}
 	}
 	return null;
