@@ -175,7 +175,7 @@ var setEureka = function(robot, bot, channel, url)
 		eureka.push({"channel":channel,"url":url});
 		data.eureka = eureka;
         var dbo = db.db("apuser"); 
-		db.collection.update({'team_name': bot.data.team_name}, 
+		dbo.collection.update({'team_name': bot.data.team_name}, 
 							{//put whatever you want to insert
 								eureka:eureka
 							},
@@ -203,7 +203,7 @@ var setJenkins = function(robot, bot, channel, url)
 		jenkins.push({"channel":channel,"url":url});
 		data.jenkins = jenkins;
         var dbo = db.db("apuser"); 
-		db.collection.update({'team_name': bot.data.team_name}, 
+		dbo.collection.update({'team_name': bot.data.team_name}, 
 							{//put whatever you want to insert
 								jenkins:jenkins
 							},
