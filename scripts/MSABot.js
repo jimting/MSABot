@@ -171,7 +171,7 @@ var setEureka = function(robot, bot, channel, url)
 			}
 		}
 		
-		data.eureka.push({"channel":channel,"url":url});
+		data.eureka.push({"channel":channel,"url":url.replace("<", "").replace(">", "")});
 		
         var dbo = db.db("apuser"); 
 		var myquery = {team_name: bot.data.team_name};
@@ -197,7 +197,7 @@ var setJenkins = function(robot, bot, channel, url)
 			}
 		}
 		
-		data.jenkins.push({"channel":channel,"url":url});
+		data.jenkins.push({"channel":channel,"url":url.replace("<", "").replace(">", "")});
 		
         var dbo = db.db("apuser"); 
 		var myquery = {team_name: bot.data.team_name};
