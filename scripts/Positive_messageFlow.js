@@ -155,11 +155,10 @@ function stage1(bot, robot, data, team_name, service, intent)
 	/* intents that don't need the service name */
 	switch(intent)
 	{
-		case "action_service_env"		:action_service_env(bot, robot, data, team_name, service);break;
-			
+		case "action_service_env"		:action_service_env(bot, robot, data, team_name, service);return;
+		case "bot_help" : action_bot_help(bot, robot, data, team_name, service);return;
 	}
-	
-	
+
 	if(service=="none" || service==null)
 	{
 		stage2(bot, robot, data, team_name, intent);
