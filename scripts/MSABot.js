@@ -37,6 +37,20 @@ exports.getBot =  function(robot, bot)
    return getBot(robot, bot);
 }
 
+var checkURLSettingStatus = function(robot, bot)
+{
+	var eureka = bot.data.eureka;
+	var jenkins = bot.data.jenkins;
+	if( eureka.length == 0)
+	{
+		bot.postMessageToChannel('general', "Hey, I found that this group has no eureka url set up. \nPlease use \"eureka set http://...\" to set the url for these channels that would contact with eureka.");
+	}
+	if( jenkins.length == 0)
+	{
+		bot.postMessageToChannel('general', "Hey, I found that this group has no Jenkins url set up. \nPlease use \"jenkins set http://...\" to set the url for these channels that would contact with Jenkins.");
+	}
+}
+
 var initBot = function(robot)
 {
     //get all bot data from mongodb
@@ -64,6 +78,7 @@ var initBot = function(robot)
                 // create a bot
                 var bot = newBot(token, name, robot, team);
                 var tempBot = {bot:bot, token:token, name:name, data:botData[i]};
+				checkURLSettingStatus(robot, tempBot);
                 bots.push(tempBot);
             }
             robot.brain.set("reconnect_count", 0);
