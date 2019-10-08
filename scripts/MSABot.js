@@ -43,11 +43,11 @@ var checkURLSettingStatus = function(robot, bot)
 	var jenkins = bot.data.jenkins;
 	if( eureka.length == 0)
 	{
-		bot.postMessageToChannel('general', "Hey, I found that this group has no eureka url set up. \nPlease use \"eureka set http://...\" to set the url for these channels that would contact with eureka.");
+		bot.bot.postMessageToChannel('general', "Hey, I found that this group has no eureka url set up. \nPlease use \"eureka set http://...\" to set the url for these channels that would contact with eureka.");
 	}
 	if( jenkins.length == 0)
 	{
-		bot.postMessageToChannel('general', "Hey, I found that this group has no Jenkins url set up. \nPlease use \"jenkins set http://...\" to set the url for these channels that would contact with Jenkins.");
+		bot.bot.postMessageToChannel('general', "Hey, I found that this group has no Jenkins url set up. \nPlease use \"jenkins set http://...\" to set the url for these channels that would contact with Jenkins.");
 	}
 }
 
