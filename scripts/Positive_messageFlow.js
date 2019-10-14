@@ -1,3 +1,9 @@
+/*#####################################################
+###	2019/10/14										###
+###	created by jimting								###
+###	for MSABot project, and my graduate paper QAQ	###
+#######################################################*/
+
 var admin_data = { "room": process.env.adminRoom, "user_id": process.env.adminID};
 var MSABot = require('./MSABot');
 

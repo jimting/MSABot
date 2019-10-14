@@ -1,3 +1,9 @@
+/*#####################################################
+###	2019/10/14										###
+###	created by jimting								###
+###	for MSABot project, and my graduate paper QAQ	###
+#######################################################*/
+
 var admin_data = { "room": process.env.adminRoom, "user_id": process.env.adminID};
 var MongoClient = require('mongodb').MongoClient;
 var userDB = process.env.UserDB;
@@ -151,7 +157,7 @@ var resetBot = function(robot)
                 //一個一個更新
                 robot.send(admin_data,"("+bots[i].data.team_name+")The bot will reconnect to RTM.");
                 //console.log(bots[i].bot.ws);
-                bots[i].bot = newBot(bots[i].data.bot_access_token, "APMessengerBot", robot, bots[i].data.team_name);
+                bots[i].bot = newBot(bots[i].data.bot_access_token, "MSABot", robot, bots[i].data.team_name);
             }
             else
             {
