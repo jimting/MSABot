@@ -44,6 +44,25 @@ module.exports = function(robot)
             bot.bot.postMessage(json.roomNumber, result.toString());  
         }
     });
+	
+	/*########## for eureka server ##########*/
+    var context = require('rabbit.js').createContext(process.env.RabbitMQUrl);
+    var sub = context.socket('SUBSCRIBE');
+    sub.connect('eureka');
+    sub.setEncoding('utf8');
+    sub.on('data', function(note) {
+        var json = JSON.parse(note);
+		var result = "["+json.status+"] Your service " + json.appName + " on Eureka Server has some activities.";
+       
+		robot.send(admin_data,"There're new eureka data pushed.");
+		
+		var bots = robot.brain.get('bots');
+		for(var i = 0;i < bots.length; i++)
+        {
+            var bot = bots[i];
+            bot.bot.postMessage(json.roomID, result.toString());  
+        }
+    });
 }
 
 
