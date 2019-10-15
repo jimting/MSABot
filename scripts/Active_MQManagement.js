@@ -48,7 +48,7 @@ module.exports = function(robot)
 	/*########## for eureka server ##########*/
     var context = require('rabbit.js').createContext(process.env.RabbitMQUrl);
     var sub = context.socket('SUBSCRIBE');
-    sub.connect('eureka');
+    sub.connect('eurekaserver');
     sub.setEncoding('utf8');
     sub.on('data', function(note) {
         var json = JSON.parse(note);
