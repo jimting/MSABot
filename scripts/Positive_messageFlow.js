@@ -197,6 +197,9 @@ function stage2(bot, robot, data, team_name, intent)
 	var intentStr = "";
 	switch(intent)
 	{
+		case "action_detail_api"		:intentStr = "service api's detail";break;
+		case "action_connect_error"		:intentStr = "service's connect error data";break;
+		case "action_build_fail"		:intentStr = "service's last failed building data";break;
 		case "action_service_health"	:intentStr = "service's health data";break;
 		case "action_service_info"		:intentStr = "service's information";break;
 		case "action_service_using_info":intentStr = "service's using overview";break;
