@@ -242,7 +242,7 @@ function action_detail_api(bot, robot, data, team_name, service)
 }
 
 /* send the service's last failed build data to user */
-function action_last_build_fail(bot, robot, data, team_name, service)
+function action_build_fail(bot, robot, data, team_name, service)
 {
 	// setting the stage first.
 	robot.brain.set("stage"+data.channel, 0);
