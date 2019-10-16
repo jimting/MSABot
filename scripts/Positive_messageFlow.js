@@ -128,8 +128,8 @@ function stage0(bot, robot, data, team_name)
 			if(stage != 0 && stage != null)
 			{
 				console.log("有先前對話進行中");
-				intent2 = robot.brain.get('intent'+data.channel);
-				stage1(bot, robot, data, team_name, service, intent2);
+				intent_before = robot.brain.get('intent'+data.channel);
+				stage1(bot, robot, data, team_name, service, intent_before);
 			}
 			else if(intent != "none")
 			{
@@ -163,6 +163,7 @@ function stage1(bot, robot, data, team_name, service, intent)
 	{
 		case "action_service_env"		:action_service_env(bot, robot, data, team_name, service);return;
 		case "bot_help" : action_bot_help(bot, robot, data, team_name, service);return;
+		default : break;
 	}
 
 	if(service=="none" || service==null)
