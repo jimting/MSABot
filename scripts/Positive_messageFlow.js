@@ -81,6 +81,7 @@ function mentionAndAnalyze(bot, robot, data, team_name)
 	var bot_id = "@"+bot.self.id;
 	var result = data.text.match(bot_id);
 	data.text = data.text.replace(bot_id, "");
+	console.log(data.text);
     if(result != null)
     {
 		stage0(bot, robot, data, team_name);
