@@ -126,7 +126,7 @@ function stage0(bot, robot, data, team_name)
 			
 			var stage = robot.brain.get('stage'+data.channel);
 			console.log("此對話階段 : " + stage);
-			if(stage != 0 && stage != null)
+			if(stage == 2 && stage != null)
 			{
 				console.log("有先前對話進行中");
 				intent_before = robot.brain.get('intent'+data.channel);
