@@ -176,6 +176,9 @@ function stage1(bot, robot, data, team_name, service, intent)
 	{
 		switch(intent)
 		{
+			case "action_detail_api"		:action_detail_api(bot, robot, data, team_name, service);break;
+			case "action_connect_error"		:action_connect_error(bot, robot, data, team_name, service);break;
+			case "action_build_fail"		:action_build_fail(bot, robot, data, team_name, service);break;
 			case "action_service_health"	:action_service_health(bot, robot, data, team_name, service);break;
 			case "action_service_info"		:action_service_info(bot, robot, data, team_name, service);break;
 			case "action_service_using_info":action_service_using_info(bot, robot, data, team_name, service);break;
@@ -223,6 +226,36 @@ function action_bot_help(bot, robot, data, team_name, service)
 	using_guide += "8. Setting the Eureka/Jenkins Url. ex. \"eureka/jenkins set http://...\"";
 	
 	bot.postMessage(data.channel, using_guide);
+}
+
+/* send the service's api's detail info to user */
+function action_detail_api(bot, robot, data, team_name, service)
+{
+	// setting the stage first.
+	robot.brain.set("stage"+data.channel, 0);
+	
+	bot.postMessage(data.channel, "Here is service \"" + service +"\" 's action_detail_api.");
+	robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the action_detail_api information successfully!");
+}
+
+/* send the service's last failed build data to user */
+function action_last_build_fail(bot, robot, data, team_name, service)
+{
+	// setting the stage first.
+	robot.brain.set("stage"+data.channel, 0);
+	
+	bot.postMessage(data.channel, "Here is service \"" + service +"\" 's action_last_build_fail.");
+	robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the action_last_build_fail information successfully!");
+}
+
+/* send the service's connection error data to user */
+function action_connect_error(bot, robot, data, team_name, service)
+{
+	// setting the stage first.
+	robot.brain.set("stage"+data.channel, 0);
+	
+	bot.postMessage(data.channel, "Here is service \"" + service +"\" 's action_connect_error.");
+	robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the action_connect_error information successfully!");
 }
 
 /* send service's health data to user */
