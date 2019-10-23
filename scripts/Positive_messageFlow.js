@@ -366,8 +366,8 @@ function action_service_info(bot, robot, data, team_name, service)
 		result += "Group : " + json.build.group + "\n";
 		result += "Git URL : " + json.git.remote.origin.url + "\n";
 		result += "Git branch : " + json.git.branch + "\n";
-		result += "Git user : " + json.git.commit.name + "\n";
-		result += "(If this service has some problems contact him/her by : "+ json.git.commit.email +" )"
+		result += "Git user : " + json.git.commit.user.name + "\n";
+		result += "(If this service has some problems contact him/her by : "+ json.git.commit.user.email +" )\n"
 		result += "Total commit count : " + json.git.total.commit.count + "\n";
 		
 		result += "See detail information on Swagger! : " + zuul_url + service + "/swagger-ui.html/";
@@ -378,14 +378,57 @@ function action_service_info(bot, robot, data, team_name, service)
 	robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the service information successfully!");
 }
 
-/* Dev Status : false */
+/* Dev Status : true */
 /* send service's using_info to user */
 function action_service_using_info(bot, robot, data, team_name, service)
 {
 	// setting the stage first.
 	robot.brain.set("stage"+data.channel, 0);
+	// get the zuul url for this channel
+	var bot_in_brain = MSABot.getBot(robot, bot);
+	zuul_url = MSABot.getZuul(bot_in_brain, data.channel);
 	
-	bot.postMessage(data.channel, "Here is service \"" + service +"\" 's using overview.");
+	var request = require("request");
+	var fs = require("fs");
+	request({
+		url: zuul_url + service + "/metrics",
+		method: "GET"
+	}, 
+	function(e,r,b) 
+	{
+		if(e || !b) { return; }
+		console.log(b);
+		var json = JSON.parse(b);
+		
+		var result = "";
+		
+		var count_200 = 0;
+		var count_404 = 0;
+		var count_503 = 0;
+		
+		var index = [];
+
+		// build the index
+		for (var x in json) 
+		{
+		   index.push(x);
+		}
+		
+		for (var i = 0;i < index.length; i++)
+		{
+			if(index[i].includes("200")) count_200++;
+			if(index[i].includes("404")) count_404++;
+			if(index[i].includes("503")) count_503++;
+		}
+		pie_chart_data = "{type:'pie', data:{ labels:['200','404','503'],datasets:[{data:["+count_200+","+count_404+","+count_503+"]}]}}";
+
+		result += "The total using amount is : " + (count_200+count_404+count_503) + "\n";
+		result += "See the pie chart I prepared for you! \n";
+		result += "https://quickchart.io/chart?c=" + pie_chart_data;
+		bot.postMessage(data.channel, result);
+	
+	});
+	
 	robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the service overview successfully!");
 }
 
@@ -401,7 +444,6 @@ function action_service_api_list(bot, robot, data, team_name, service)
 	
 	var request = require("request");
 	var fs = require("fs");
-	var cheerio = require("cheerio");
 	request({
 		url: zuul_url + service + "/v2/api-docs/",
 		method: "GET"
@@ -450,7 +492,6 @@ function action_service_env(bot, robot, data, team_name)
 	
 	var request = require("request");
 	var fs = require("fs");
-	var cheerio = require("cheerio");
 	request({
 		url: eureka_url + "env/",
 		method: "GET"
