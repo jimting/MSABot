@@ -369,6 +369,7 @@ function action_service_info(bot, robot, data, team_name, service)
 	function(e,r,b) 
 	{
 		if(e || !b) { return; }
+		console.log(b);
 		var json = JSON.parse(b);
 		
 		var result = json.info.title + " : " + json.tags[0].name + "\n";
