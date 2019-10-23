@@ -251,8 +251,8 @@ function action_build_fail(bot, robot, data, team_name, service)
 {
 	// setting the stage first.
 	robot.brain.set("stage"+data.channel, 0);
-		
-	var jenkins_url = MSABot.getJenkins(bot, data.channel);
+	var bot_in_brain = MSABot.getBot(robot, bot);
+	var jenkins_url = MSABot.getJenkins(bot_in_brain, data.channel);
 	if(jenkins_url != null)
 	{
 		bot.postMessage(data.channel, "Here is service \"" + service +"\" 's action_detail_api.");
