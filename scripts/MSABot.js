@@ -28,6 +28,11 @@ exports.setJenkins =  function(robot, bot, channel, url)
    setJenkins(robot, bot, channel, url);
 }
 
+exports.setZuul =  function(robot, bot, channel, url)
+{
+   setZuul(robot, bot, channel, url);
+}
+
 exports.getEureka =  function(bot, channel)
 {
    return getEureka(bot, channel);
@@ -36,6 +41,11 @@ exports.getEureka =  function(bot, channel)
 exports.getJenkins =  function(bot, channel)
 {
    return getJenkins(bot, channel);
+}
+
+exports.getZuul =  function(bot, channel)
+{
+   return getZuul(bot, channel);
 }
 
 exports.getBot =  function(robot, bot)
@@ -228,6 +238,31 @@ var setJenkins = function(robot, bot, channel, url)
     }); 
 }
 
+var setZuul = function(robot, bot, channel, url)
+{
+	MongoClient.connect(userDB, { useNewUrlParser: false }, function(err, db) {
+        if (err) throw err;
+		var data = bot.data;
+		//remove old data
+		for(var i = 0; i < data.zuul.length; i++)
+		{
+			if(data.zuul[i].channel == channel)
+			{
+				data.zuul.splice(i, 1);
+				break;
+			}
+		}
+		
+		data.zuul.push({"channel":channel,"url":url.replace("<", "").replace(">", "")});
+		
+        var dbo = db.db("apuser"); 
+		var myquery = {team_name: bot.data.team_name};
+		var newvalues = { $set: {zuul:data.zuul} };
+		dbo.collection("apuser").updateOne(myquery, newvalues, {upsert: true});
+		renewBotData(robot, data);
+		db.close();
+    }); 
+}
 var renewBotData = function(robot, data)
 {
 	var bots = robot.brain.get('bots');
@@ -265,6 +300,19 @@ var getJenkins = function(bot, channel)
 		if(jenkins[i].channel == channel)
 		{
 			return jenkins[i].url;
+		}
+	}
+	return null;
+}
+
+var getZuul = function(bot, channel)
+{
+	var zuul = bot.data.zuul
+	for(var i = 0;i < zuul.length; i++)
+	{
+		if(zuul[i].channel == channel)
+		{
+			return zuul[i].url;
 		}
 	}
 	return null;

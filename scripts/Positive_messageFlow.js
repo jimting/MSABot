@@ -53,6 +53,7 @@ function commandAnalyze(bot, robot, data, team_name)
 					}
 				}
 				break;
+				
 			case "jenkins":
 				var intent = result[2];
 				if(intent != null)
@@ -69,6 +70,27 @@ function commandAnalyze(bot, robot, data, team_name)
 						case "set":
 							MSABot.setJenkins(robot, bot_in_brain, data.channel, result[3]);
 							bot.postMessage(data.channel, "Successfully setting the Jenkins server.");
+							break;
+					}
+				}
+				break;
+				
+			case "zuul":
+				var intent = result[2];
+				if(intent != null)
+				{
+					switch(intent)
+					{
+						case "url":
+							var url = MSABot.getZuul(bot_in_brain, data.channel);
+							if(url != null)
+								bot.postMessage(data.channel, "The channel's Zuul URL is : " + url);
+							else
+								bot.postMessage(data.channel, "This channel doesn't set the Zuul Url.");
+							break;
+						case "set":
+							MSABot.setZuul(robot, bot_in_brain, data.channel, result[3]);
+							bot.postMessage(data.channel, "Successfully setting the Zuul server.");
 							break;
 					}
 				}
@@ -245,7 +267,7 @@ function action_detail_api(bot, robot, data, team_name, service)
 	robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the action_detail_api information successfully!");
 }
 
-/* Dev Status : false */
+/* Dev Status : true */
 /* send the service's last failed build data to user */
 function action_build_fail(bot, robot, data, team_name, service)
 {
@@ -263,7 +285,7 @@ function action_build_fail(bot, robot, data, team_name, service)
 			bot.postMessage(data.channel, result);
 		});
 		
-		robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the action_build_fail information successfully!");
+		robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the jenkins building data successfully!");
 	}
 }
 
