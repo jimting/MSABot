@@ -369,8 +369,7 @@ function action_service_info(bot, robot, data, team_name, service)
 	function(e,r,b) 
 	{
 		if(e || !b) { return; }
-		$ = cheerio.load(b);
-		var json = JSON.parse($('pre'));
+		var json = JSON.parse(b);
 		
 		var result = json.info.title + " : " + json.tags[0].name + "\n";
 		result += "(" + json.tags[0].description + ")\n";
