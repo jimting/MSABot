@@ -447,7 +447,6 @@ function action_service_env(bot, robot, data, team_name)
 		result += "This channel's Eureka server is : " + MSABot.getEureka(bot_in_brain, data.channel) + "\n";
 		result += "This channel's Jenkins server is : " + MSABot.getJenkins(bot_in_brain, data.channel) + "\n";
 		result += "This channel's Zuul server is : " + MSABot.getZuul(bot_in_brain, data.channel) + "\n";
-		result += "The OS on your server is : " + json.systemProperties.os.name + "\n";
 		
 		var index = [];
 
