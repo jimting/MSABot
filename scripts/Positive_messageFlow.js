@@ -307,6 +307,32 @@ function action_service_health(bot, robot, data, team_name, service)
 	// setting the stage first.
 	robot.brain.set("stage"+data.channel, 0);
 	
+	// get the eureka url for this channel
+	var bot_in_brain = MSABot.getBot(robot, bot);
+	eureka_url = MSABot.getEureka(bot_in_brain, data.channel);
+	
+	var request = require("request");
+	var fs = require("fs");
+	var cheerio = require("cheerio");
+	request({
+		url: eureka_url+"/eureka/apps",
+		method: "GET"
+	}, 
+	function(e,r,b) 
+	{
+		if(e || !b) { return; }
+		var $ = cheerio.load(b);
+		var result = "";
+		var applications = $("application");
+		for(var i=0;i<applications.length;i++) 
+		{
+			result += (i+1) + ". " + applications[i].name + " : " + applications[i].status;
+		}
+		
+		bot.postMessage(data.channel, result);
+	
+	});
+	/*
 	var fs = require("fs");
 	fs.readFile('scripts/data/service_health.txt', 'utf8', function(err, d) 
 	{
@@ -319,7 +345,7 @@ function action_service_health(bot, robot, data, team_name, service)
 		console.log(result);
 		bot.postMessage(data.channel, result);
 		robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the service health data successfully!");
-    });
+    });*/
 }
 
 /* Dev Status : false */
