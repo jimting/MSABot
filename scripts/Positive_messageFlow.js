@@ -348,7 +348,7 @@ function action_service_health(bot, robot, data, team_name)
     });*/
 }
 
-/* Dev Status : false */
+/* Dev Status : true */
 /* send service's info to user */
 function action_service_info(bot, robot, data, team_name, service)
 {
@@ -374,6 +374,7 @@ function action_service_info(bot, robot, data, team_name, service)
 		
 		var result = json.info.title + " : " + json.tags[0].name + "\n";
 		result += "(" + json.tags[0].description + ")\n";
+		result += "If this service went some problems, please call " + json.info.contact.name + "\n";
 		result += "Some api intro : \n";
 		
 		var index = [];
@@ -388,6 +389,7 @@ function action_service_info(bot, robot, data, team_name, service)
 			result += index[i] + " : " + json.paths[index[i]].get.summary + "\n";
 		}
 		
+		result += "See detail information on Swagger! : " + zuul_url + service + "/swagger-ui.html/";
 		bot.postMessage(data.channel, result);
 	
 	});
@@ -424,6 +426,43 @@ function action_service_env(bot, robot, data, team_name)
 	// setting the stage first.
 	robot.brain.set("stage"+data.channel, 0);
 	
-	bot.postMessage(data.channel, "Here is the env setting.");
+	// get the zuul url for this channel
+	var bot_in_brain = MSABot.getBot(robot, bot);
+	eureka_url = MSABot.getEureka(bot_in_brain, data.channel);
+	
+	var request = require("request");
+	var fs = require("fs");
+	var cheerio = require("cheerio");
+	request({
+		url: eureka_url + "env/",
+		method: "GET"
+	}, 
+	function(e,r,b) 
+	{
+		if(e || !b) { return; }
+		console.log(b);
+		var json = JSON.parse(b);
+		
+		var result = "I found some env settings on your server! \n";
+		result += "This channel's Eureka server is : " + MSABot.getEureka(bot_in_brain, data.channel) + "\n";
+		result += "This channel's Jenkins server is : " + MSABot.getJenkins(bot_in_brain, data.channel) + "\n";
+		result += "This channel's Zuul server is : " + MSABot.getZuul(bot_in_brain, data.channel) + "\n";
+		result += "The OS on your server is : " + json.systemProperties.os.name + "\n";
+		
+		var index = [];
+
+		// build the index
+		for (var x in json.applicationConfig) 
+		{
+		   index.push(x);
+		}
+		for (var i = 0;i < index.length; i++)
+		{
+			result += "The env "+ index[i] +" is : " + json.applicationConfig[index[i]] + "\n";
+		}
+		
+		bot.postMessage(data.channel, result);
+	
+	});
 	robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the env information successfully!");
 }
