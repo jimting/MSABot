@@ -449,15 +449,15 @@ function action_service_env(bot, robot, data, team_name)
 		result += "This channel's Zuul server is : " + MSABot.getZuul(bot_in_brain, data.channel) + "\n";
 		
 		var index = [];
-
+		var properties = "applicationConfig: [classpath:/application.properties]";
 		// build the index
-		for (var x in json.applicationConfig) 
+		for (var x in json[properties]) 
 		{
 		   index.push(x);
 		}
 		for (var i = 0;i < index.length; i++)
 		{
-			result += "The env "+ index[i] +" is : " + json.applicationConfig[index[i]] + "\n";
+			result += "The env "+ index[i] +" is : " + json[properties][index[i]] + "\n";
 		}
 		
 		bot.postMessage(data.channel, result);
