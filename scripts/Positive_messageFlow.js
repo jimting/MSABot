@@ -326,7 +326,7 @@ function action_service_health(bot, robot, data, team_name, service)
 		var applications = $("application");
 		for(var i=0;i<applications.length;i++) 
 		{
-			result += (i+1) + ". " + applications.eq(i).find('name').text() + " : " + applications.eq(i).find('status').text() + "\n";
+			result += (i+1) + ". " + applications.eq(i).find('name').eq(0).text() + " : " + applications.eq(i).find('status').text() + "\n";
 		}
 		
 		bot.postMessage(data.channel, result);
