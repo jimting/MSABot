@@ -363,13 +363,14 @@ function action_service_info(bot, robot, data, team_name, service)
 	var fs = require("fs");
 	var cheerio = require("cheerio");
 	request({
-		url: eureka_url + service + "/v2/api-docs",
+		url: eureka_url + service + "/v2/api-docs/",
 		method: "GET"
 	}, 
 	function(e,r,b) 
 	{
 		if(e || !b) { return; }
-		var json = JSON.parse(b);
+		$ = cheerio.load(b);
+		var json = JSON.parse($('pre'));
 		
 		var result = json.info.title + " : " + json.tags[0].name + "\n";
 		result += "(" + json.tags[0].description + ")\n";
