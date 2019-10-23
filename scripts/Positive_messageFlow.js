@@ -256,17 +256,6 @@ function action_bot_help(bot, robot, data, team_name)
 	bot.postMessage(data.channel, using_guide);
 }
 
-/* Dev Status : false */
-/* send the service's api's detail info to user */
-function action_detail_api(bot, robot, data, team_name, service)
-{
-	// setting the stage first.
-	robot.brain.set("stage"+data.channel, 0);
-		
-	bot.postMessage(data.channel, "Here is service \"" + service +"\" 's action_detail_api.");
-	robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the action_detail_api information successfully!");
-}
-
 /* Dev Status : true */
 /* send the service's last failed build data to user */
 function action_build_fail(bot, robot, data, team_name, service)
@@ -363,6 +352,57 @@ function action_service_info(bot, robot, data, team_name, service)
 	var fs = require("fs");
 	var cheerio = require("cheerio");
 	request({
+		url: zuul_url + service + "/info/",
+		method: "GET"
+	}, 
+	function(e,r,b) 
+	{
+		if(e || !b) { return; }
+		console.log(b);
+		var json = JSON.parse(b);
+		
+		var result = "See! I found these on service " + service + " ! \n";
+		result += "Version : " + json.version + "\n";
+		result += "Group : " + json.build.group + "\n";
+		result += "Git URL : " + json.git.remote.origin.url + "\n";
+		result += "Git branch : " + json.git.branch + "\n";
+		result += "Git user : " + json.git.commit.name + "\n";
+		result += "(If this service has some problems contact him/her by : "+ json.git.commit.email +" )"
+		result += "Total commit count : " + json.git.total.commit.count + "\n";
+		
+		result += "See detail information on Swagger! : " + zuul_url + service + "/swagger-ui.html/";
+		bot.postMessage(data.channel, result);
+	
+	});
+	
+	robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the service information successfully!");
+}
+
+/* Dev Status : false */
+/* send service's using_info to user */
+function action_service_using_info(bot, robot, data, team_name, service)
+{
+	// setting the stage first.
+	robot.brain.set("stage"+data.channel, 0);
+	
+	bot.postMessage(data.channel, "Here is service \"" + service +"\" 's using overview.");
+	robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the service overview successfully!");
+}
+
+/* Dev Status : true */
+/* send service's api list to user */
+function action_service_api_list(bot, robot, data, team_name, service)
+{
+	// setting the stage first.
+	robot.brain.set("stage"+data.channel, 0);
+	// get the zuul url for this channel
+	var bot_in_brain = MSABot.getBot(robot, bot);
+	zuul_url = MSABot.getZuul(bot_in_brain, data.channel);
+	
+	var request = require("request");
+	var fs = require("fs");
+	var cheerio = require("cheerio");
+	request({
 		url: zuul_url + service + "/v2/api-docs/",
 		method: "GET"
 	}, 
@@ -394,32 +434,10 @@ function action_service_info(bot, robot, data, team_name, service)
 	
 	});
 	
-	robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the service information successfully!");
-}
-
-/* Dev Status : false */
-/* send service's using_info to user */
-function action_service_using_info(bot, robot, data, team_name, service)
-{
-	// setting the stage first.
-	robot.brain.set("stage"+data.channel, 0);
-	
-	bot.postMessage(data.channel, "Here is service \"" + service +"\" 's using overview.");
-	robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the service overview successfully!");
-}
-
-/* Dev Status : false */
-/* send service's api list to user */
-function action_service_api_list(bot, robot, data, team_name, service)
-{
-	// setting the stage first.
-	robot.brain.set("stage"+data.channel, 0);
-	
-	bot.postMessage(data.channel, "Here is service \"" + service +"\" 's api list.");
 	robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the service api list successfully!");
 }
 
-/* Dev Status : false */
+/* Dev Status : true */
 /* send the env setting data to user */
 function action_service_env(bot, robot, data, team_name)
 {
@@ -443,7 +461,7 @@ function action_service_env(bot, robot, data, team_name)
 		console.log(b);
 		var json = JSON.parse(b);
 		
-		var result = "I found some env settings on your server! \n";
+		var result = "I found some env settings on your eureka server! \n";
 		result += "This channel's Eureka server is : " + MSABot.getEureka(bot_in_brain, data.channel) + "\n";
 		result += "This channel's Jenkins server is : " + MSABot.getJenkins(bot_in_brain, data.channel) + "\n";
 		result += "This channel's Zuul server is : " + MSABot.getZuul(bot_in_brain, data.channel) + "\n";
