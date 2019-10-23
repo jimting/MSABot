@@ -258,10 +258,10 @@ function action_build_fail(bot, robot, data, team_name, service)
 		bot.postMessage(data.channel, "Here is service \"" + service +"\" 's action_build_fail.");
 		
 		var jenkins = jenkinsapi.init(jenkins_url);
-		jenkins.last_build_info(service, function(err, data) {
+		jenkins.last_build_info(service, function(err, json) {
 			if (err){ return console.log(err); }
-			var result = data.fullDisplayName + "'s last build is " + data.result;
-			result += "Check it on your Jenkins server : " + data.url;
+			var result = json.fullDisplayName + "'s last build is " + json.result;
+			result += "Check it on your Jenkins server : " + json.url;
 			bot.postMessage(data.channel, result);
 		});
 		
