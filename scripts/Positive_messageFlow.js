@@ -258,7 +258,7 @@ function action_build_fail(bot, robot, data, team_name, service)
 		bot.postMessage(data.channel, "Here is service \"" + service +"\" 's action_detail_api.");
 		
 		var jenkins = jenkinsapi.init(jenkins_url);
-		jenkins.last_build_info('job-in-jenkins', (optional) {depth: 1, <param>:<value>, ...}, function(err, data) {
+		jenkins.last_build_info(service, function(err, data) {
 		  if (err){ return console.log(err); }
 		  bot.postMessage(data.channel,data);
 		});
