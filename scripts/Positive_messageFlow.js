@@ -255,12 +255,10 @@ function action_build_fail(bot, robot, data, team_name, service)
 	var jenkins_url = MSABot.getJenkins(bot_in_brain, data.channel);
 	if(jenkins_url != null)
 	{
-		bot.postMessage(data.channel, "Here is service \"" + service +"\" 's action_build_fail.");
-		
 		var jenkins = jenkinsapi.init(jenkins_url);
 		jenkins.last_build_info(service, function(err, json) {
 			if (err){ return console.log(err); }
-			var result = json.fullDisplayName + "'s last build is " + json.result;
+			var result = json.fullDisplayName + "'s last build is " + json.result + "\n";
 			result += "Check it on your Jenkins server : " + json.url;
 			bot.postMessage(data.channel, result);
 		});
