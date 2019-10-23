@@ -189,6 +189,7 @@ function stage1(bot, robot, data, team_name, service, intent)
 	{
 		case "action_service_env"		:action_service_env(bot, robot, data, team_name);return;
 		case "bot_help" : action_bot_help(bot, robot, data, team_name);return;
+		case "action_service_health"	:action_service_health(bot, robot, data, team_name);return;
 		default : break;
 	}
 
@@ -204,7 +205,6 @@ function stage1(bot, robot, data, team_name, service, intent)
 			case "action_detail_api"		:action_detail_api(bot, robot, data, team_name, service);return;
 			case "action_connect_error"		:action_connect_error(bot, robot, data, team_name, service);return;
 			case "action_build_fail"		:action_build_fail(bot, robot, data, team_name, service);return;
-			case "action_service_health"	:action_service_health(bot, robot, data, team_name, service);return;
 			case "action_service_info"		:action_service_info(bot, robot, data, team_name, service);return;
 			case "action_service_using_info":action_service_using_info(bot, robot, data, team_name, service);return;
 			case "action_service_api_list"	:action_service_api_list(bot, robot, data, team_name, service);return;
@@ -300,9 +300,9 @@ function action_connect_error(bot, robot, data, team_name, service)
 	robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the action_connect_error information successfully!");
 }
 
-/* Dev Status : false */
+/* Dev Status : true */
 /* send service's health data to user */
-function action_service_health(bot, robot, data, team_name, service)
+function action_service_health(bot, robot, data, team_name)
 {
 	// setting the stage first.
 	robot.brain.set("stage"+data.channel, 0);
@@ -329,7 +329,7 @@ function action_service_health(bot, robot, data, team_name, service)
 			result += (i+1) + ". " + applications.eq(i).find('name').eq(0).text() + " : " + applications.eq(i).find('status').text() + "\n";
 		}
 		
-		bot.postMessage(data.channel, result);
+		bot.postMessage(data.channel, "Here are the services' health status : \n" + result);
 	
 	});
 	/*
@@ -355,7 +355,42 @@ function action_service_info(bot, robot, data, team_name, service)
 	// setting the stage first.
 	robot.brain.set("stage"+data.channel, 0);
 	
-	bot.postMessage(data.channel, "Here is service \"" + service +"\" 's information.");
+	// get the zuul url for this channel
+	var bot_in_brain = MSABot.getBot(robot, bot);
+	zuul_url = MSABot.getZuul(bot_in_brain, data.channel);
+	
+	var request = require("request");
+	var fs = require("fs");
+	var cheerio = require("cheerio");
+	request({
+		url: eureka_url + service + "/v2/api-docs",
+		method: "GET"
+	}, 
+	function(e,r,b) 
+	{
+		if(e || !b) { return; }
+		var json = JSON.parse(b);
+		
+		var result = json.info.title + " : " + json.tags[0].name + "\n";
+		result += "(" + json.tags[0].description + ")\n";
+		result += "Some api intro : \n";
+		
+		var index = [];
+
+		// build the index
+		for (var x in json.paths) 
+		{
+		   index.push(x);
+		}
+		for (var i = 0;i < index.length; i++)
+		{
+			result += json.paths.index[i].text() + "\n";
+		}
+		
+		bot.postMessage(data.channel, result);
+	
+	});
+	
 	robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the service information successfully!");
 }
 
