@@ -6,6 +6,8 @@
 
 var admin_data = { "room": process.env.adminRoom, "user_id": process.env.adminID};
 var MSABot = require('./MSABot');
+var jenkinsapi = require('jenkins-api');
+
 
 exports.hubotAnalyze =  function(bot, robot, data, team_name)
 {
@@ -92,8 +94,8 @@ function mentionAndAnalyze(bot, robot, data, team_name)
 }
 
 /*===================================*/
-// stage 0 : if analyze no intent, ask the intent, if have, go stage1
-// stage 1 : analyze the intent result, if have service name, skip stage2 to mission
+// stage 0 : if analyze no intent, ask the intent, if have, go stage1 
+// stage 1 : analyze the intent result, if have service name, skip stage2 to mission | if the intent doesn't need the service name, go to stage3
 // stage 2 : if lack service name, ask service name.
 // stage 3 : mission.
 /*===================================*/
@@ -163,27 +165,27 @@ function stage1(bot, robot, data, team_name, service, intent)
 	/* intents that don't need the service name */
 	switch(intent)
 	{
-		case "action_service_env"		:action_service_env(bot, robot, data, team_name, service);return;
-		case "bot_help" : action_bot_help(bot, robot, data, team_name, service);return;
+		case "action_service_env"		:action_service_env(bot, robot, data, team_name);return;
+		case "bot_help" : action_bot_help(bot, robot, data, team_name);return;
 		default : break;
 	}
 
+	/* if have no service name, ask them the service name */
 	if(service=="none" || service==null)
 	{
 		stage2(bot, robot, data, team_name, intent);
 	}
-	else
+	else /* if have, go to stage3 */
 	{
 		switch(intent)
 		{
-			case "action_detail_api"		:action_detail_api(bot, robot, data, team_name, service);break;
-			case "action_connect_error"		:action_connect_error(bot, robot, data, team_name, service);break;
-			case "action_build_fail"		:action_build_fail(bot, robot, data, team_name, service);break;
-			case "action_service_health"	:action_service_health(bot, robot, data, team_name, service);break;
-			case "action_service_info"		:action_service_info(bot, robot, data, team_name, service);break;
-			case "action_service_using_info":action_service_using_info(bot, robot, data, team_name, service);break;
-			case "action_service_api_list"	:action_service_api_list(bot, robot, data, team_name, service);break;
-			case "action_detail_api"		:action_detail_api();break;
+			case "action_detail_api"		:action_detail_api(bot, robot, data, team_name, service);return;
+			case "action_connect_error"		:action_connect_error(bot, robot, data, team_name, service);return;
+			case "action_build_fail"		:action_build_fail(bot, robot, data, team_name, service);return;
+			case "action_service_health"	:action_service_health(bot, robot, data, team_name, service);return;
+			case "action_service_info"		:action_service_info(bot, robot, data, team_name, service);return;
+			case "action_service_using_info":action_service_using_info(bot, robot, data, team_name, service);return;
+			case "action_service_api_list"	:action_service_api_list(bot, robot, data, team_name, service);return;
 		}
 	}
 }
@@ -212,8 +214,9 @@ function stage2(bot, robot, data, team_name, intent)
 	//end the flow
 }
 
+/* Dev Status : true */
 /* using guide for MSABot */
-function action_bot_help(bot, robot, data, team_name, service)
+function action_bot_help(bot, robot, data, team_name)
 {
 	var using_guide = "Hi, I'm MSABot. I can assist you to look out the service you're developing and maintaining.\nHow to use me? : \n";
 	using_guide += "** Catch your service information **\n";
@@ -231,26 +234,40 @@ function action_bot_help(bot, robot, data, team_name, service)
 	bot.postMessage(data.channel, using_guide);
 }
 
+/* Dev Status : false */
 /* send the service's api's detail info to user */
 function action_detail_api(bot, robot, data, team_name, service)
 {
 	// setting the stage first.
 	robot.brain.set("stage"+data.channel, 0);
-	
+		
 	bot.postMessage(data.channel, "Here is service \"" + service +"\" 's action_detail_api.");
 	robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the action_detail_api information successfully!");
 }
 
+/* Dev Status : false */
 /* send the service's last failed build data to user */
 function action_build_fail(bot, robot, data, team_name, service)
 {
 	// setting the stage first.
 	robot.brain.set("stage"+data.channel, 0);
-	
-	bot.postMessage(data.channel, "Here is service \"" + service +"\" 's action_last_build_fail.");
-	robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the action_last_build_fail information successfully!");
+		
+	var jenkins_url = MSABot.getJenkins(bot, data.channel);
+	if(jenkins_url != null)
+	{
+		bot.postMessage(data.channel, "Here is service \"" + service +"\" 's action_detail_api.");
+		
+		var jenkins = jenkinsapi.init(jenkins_url);
+		jenkins.last_build_info('job-in-jenkins', (optional) {depth: 1, <param>:<value>, ...}, function(err, data) {
+		  if (err){ return console.log(err); }
+		  bot.postMessage(data.channel,data);
+		});
+		
+		robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the action_detail_api information successfully!");
+	}
 }
 
+/* Dev Status : false */
 /* send the service's connection error data to user */
 function action_connect_error(bot, robot, data, team_name, service)
 {
@@ -261,6 +278,7 @@ function action_connect_error(bot, robot, data, team_name, service)
 	robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the action_connect_error information successfully!");
 }
 
+/* Dev Status : false */
 /* send service's health data to user */
 function action_service_health(bot, robot, data, team_name, service)
 {
@@ -282,6 +300,7 @@ function action_service_health(bot, robot, data, team_name, service)
     });
 }
 
+/* Dev Status : false */
 /* send service's info to user */
 function action_service_info(bot, robot, data, team_name, service)
 {
@@ -292,6 +311,7 @@ function action_service_info(bot, robot, data, team_name, service)
 	robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the service information successfully!");
 }
 
+/* Dev Status : false */
 /* send service's using_info to user */
 function action_service_using_info(bot, robot, data, team_name, service)
 {
@@ -302,6 +322,7 @@ function action_service_using_info(bot, robot, data, team_name, service)
 	robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the service overview successfully!");
 }
 
+/* Dev Status : false */
 /* send service's api list to user */
 function action_service_api_list(bot, robot, data, team_name, service)
 {
@@ -312,12 +333,13 @@ function action_service_api_list(bot, robot, data, team_name, service)
 	robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the service api list successfully!");
 }
 
+/* Dev Status : false */
 /* send the env setting data to user */
-function action_service_env(bot, robot, data, team_name, service)
+function action_service_env(bot, robot, data, team_name)
 {
 	// setting the stage first.
 	robot.brain.set("stage"+data.channel, 0);
 	
-	bot.postMessage(data.channel, "Here is service \"" + service +"\" 's env setting.");
+	bot.postMessage(data.channel, "Here is the env setting.");
 	robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the env information successfully!");
 }
