@@ -385,7 +385,7 @@ function action_service_info(bot, robot, data, team_name, service)
 		}
 		for (var i = 0;i < index.length; i++)
 		{
-			result += index[i] + " : " + json.paths.(index[i]).summary + "\n";
+			result += index[i] + " : " + json.paths[index[i]].get.summary + "\n";
 		}
 		
 		bot.postMessage(data.channel, result);
