@@ -420,7 +420,7 @@ function action_service_using_info(bot, robot, data, team_name, service)
 			if(index[i].includes("404")) count_404++;
 			if(index[i].includes("503")) count_503++;
 		}
-		pie_chart_data = "{type:'pie', data:{ labels:['200','404','503'],datasets:[{data:["+count_200+","+count_404+","+count_503+"]}]}}";
+		pie_chart_data = "{type:'pie',data:{labels:['200','404','503'],datasets:[{data:["+count_200+","+count_404+","+count_503+"]}]}}";
 
 		result += "The total using amount is : " + (count_200+count_404+count_503) + "\n";
 		result += "See the pie chart I prepared for you! \n";
