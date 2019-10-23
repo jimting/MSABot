@@ -363,7 +363,7 @@ function action_service_info(bot, robot, data, team_name, service)
 	var fs = require("fs");
 	var cheerio = require("cheerio");
 	request({
-		url: eureka_url + service + "/v2/api-docs/",
+		url: zuul_url + service + "/v2/api-docs/",
 		method: "GET"
 	}, 
 	function(e,r,b) 
