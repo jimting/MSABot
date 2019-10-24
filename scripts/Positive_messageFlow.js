@@ -305,7 +305,7 @@ function action_service_health(bot, robot, data, team_name)
 	var fs = require("fs");
 	var cheerio = require("cheerio");
 	request({
-		url: eureka_url+"/eureka/apps",
+		url: eureka_url+"eureka/apps",
 		method: "GET"
 	}, 
 	function(e,r,b) 
