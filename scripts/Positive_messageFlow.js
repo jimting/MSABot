@@ -310,7 +310,7 @@ function action_service_health(bot, robot, data, team_name)
 	}, 
 	function(e,r,b) 
 	{
-		if(e || !b) { return; }
+		if(e || !b) { bot.postMessage(data.channel, e); }
 		var $ = cheerio.load(b);
 		var result = "";
 		var applications = $("application");
