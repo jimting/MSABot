@@ -242,16 +242,17 @@ function action_bot_help(bot, robot, data, team_name)
 {
 	var using_guide = "Hi, I'm MSABot. I can assist you to look out the service you're developing and maintaining.\nHow to use me? : \n";
 	using_guide += "** Catch your service information **\n";
-	using_guide += "1. Searching the service's health data. ex. @MSABot, I want the health data for ServiceA.\n";
-	using_guide += "2. Searching the service's information. ex. @MSABot, I want the information for ServiceA.\n";
-	using_guide += "3. Searching the service's overview.	ex. @MSABot, Tell me the overview for ServiceA.\n";
-	using_guide += "4. Searching the service's api list.	ex. @MSABot, Give me the api list on ServiceA.\n";
-	using_guide += "5. Searching the env setting.			ex. @MSABot, Tell me the env setting info.\n";
-	using_guide += "6. Searching the build data on Jenkins. ex. @MSABot, What's the reason my building failed for ServiceA?\n";
-	using_guide += "7. Searching the connection status on Eureka. ex. @MSABot, Tell me the connection error about ServiceA.\n";
-	using_guide += "(Not yet)8. Get the dependency graph from VMAMV.	ex. @MSABot, give me the dependency graph.\n";
+	using_guide += "1. Search the services' health data. ex. @MSABot I want the health data.\n";
+	using_guide += "2. Search the service's information. ex. @MSABot I want the information for ServiceA.\n";
+	using_guide += "3. Search the service's overview.	ex. @MSABot Tell me the overview for ServiceA.\n";
+	using_guide += "4. Search the service's api list.	ex. @MSABot Give me the api list on ServiceA.\n";
+	using_guide += "5. Search the env setting.			ex. @MSABot Tell me the env setting info.\n";
+	using_guide += "6. Search the build data on Jenkins. ex. @MSABot What's the reason my building failed for ServiceA?\n";
+	using_guide += "(Not yet)7. Search the connection status on Eureka. ex. @MSABot Tell me the connection error about ServiceA.\n";
+	using_guide += "(Not yet)8. Get the dependency graph from VMAMV.	ex. @MSABot give me the dependency graph.\n";
 	using_guide += "** Change your server setting **\n";
-	using_guide += "8. Setting the Eureka/Jenkins Url. ex. \"eureka/jenkins set http://...\"";
+	using_guide += "8. Set the Eureka/Jenkins/Zuul Url. ex. \"eureka/jenkins/zuul set http://...\"";
+	using_guide += "9. Get the Eureka/Jenkins/Zuul Url. ex. \"eureka/jenkins/zuul url";
 	
 	bot.postMessage(data.channel, using_guide);
 }
