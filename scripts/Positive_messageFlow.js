@@ -251,8 +251,8 @@ function action_bot_help(bot, robot, data, team_name)
 	using_guide += "(Not yet)7. Search the connection status on Eureka. ex. @MSABot Tell me the connection error about ServiceA.\n";
 	using_guide += "(Not yet)8. Get the dependency graph from VMAMV.	ex. @MSABot give me the dependency graph.\n";
 	using_guide += "** Change your server setting **\n";
-	using_guide += "8. Set the Eureka/Jenkins/Zuul Url. ex. \"eureka/jenkins/zuul set http://...\"";
-	using_guide += "9. Get the Eureka/Jenkins/Zuul Url. ex. \"eureka/jenkins/zuul url";
+	using_guide += "8. Set the Eureka/Jenkins/Zuul Url. ex. \"eureka/jenkins/zuul set http://...\" \n";
+	using_guide += "9. Get the Eureka/Jenkins/Zuul Url. ex. \"eureka/jenkins/zuul url\"";
 	
 	bot.postMessage(data.channel, using_guide);
 }
@@ -320,22 +320,9 @@ function action_service_health(bot, robot, data, team_name)
 		}
 		
 		bot.postMessage(data.channel, "Here are the services' health status : \n" + result);
-	
+		
+		robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the service health information successfully!");
 	});
-	/*
-	var fs = require("fs");
-	fs.readFile('scripts/data/service_health.txt', 'utf8', function(err, d) 
-	{
-		var json_data = JSON.parse(d);
-		var result = "Hey, the " + service + " 's health data is down below: \n";
-		result += "The status to this service : " + json_data.status + "\n";
-		result += "The Composite Discovery Client is : " + json_data.discoveryComposite.status+ "\n";
-		result += "The Eureka Server is : " + json_data.discoveryComposite.eureka.status+ "\n";
-		result += "The hytrix status is : " + json_data.hystrix.status+ "\n";
-		console.log(result);
-		bot.postMessage(data.channel, result);
-		robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the service health data successfully!");
-    });*/
 }
 
 /* Dev Status : true */
