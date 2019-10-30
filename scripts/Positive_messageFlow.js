@@ -358,7 +358,7 @@ function action_service_info(bot, robot, data, team_name, service)
 		result += "(If this service has some problems contact him/her by : "+ json.git.commit.user.email +" )\n"
 		result += "Total commit count : " + json.git.total.commit.count + "\n";
 		
-		result += "See detail information on Swagger! : " + zuul_url + service + "/swagger-ui.html/";
+		result += "See detail information on Swagger! : " + zuul_url + service + "/swagger-ui.html";
 		bot.postMessage(data.channel, result);
 	
 	});
@@ -459,7 +459,7 @@ function action_service_api_list(bot, robot, data, team_name, service)
 			result += index[i] + " : " + json.paths[index[i]].get.summary + "\n";
 		}
 		
-		result += "See detail information on Swagger! : " + zuul_url + service + "/swagger-ui.html/";
+		result += "See detail information on Swagger! : " + zuul_url + service + "/swagger-ui.html";
 		bot.postMessage(data.channel, result);
 	
 	});
