@@ -416,7 +416,7 @@ function action_service_using_info(bot, robot, data, team_name, service)
 			{
 				if(api_list.includes(json[i].info.path))
 				{
-					if(!status.include(json[i].info.headers.response.status))
+					if(!status.includes(json[i].info.headers.response.status))
 					{
 						status.push(json[i].info.headers.response.status);
 						status_count.push(0);
