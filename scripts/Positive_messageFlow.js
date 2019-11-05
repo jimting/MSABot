@@ -456,7 +456,7 @@ function action_service_api_list(bot, robot, data, team_name, service)
 		}
 		for (var i = 0;i < index.length; i++)
 		{
-			result += index[i] + " : " + json.paths[index[i]].get.summary + "\n";
+			result += zuul_url + service + index[i] + " : " + json.paths[index[i]].get.summary + "\n";
 		}
 		
 		result += "See detail information on Swagger! : " + zuul_url + service + "/swagger-ui.html";
