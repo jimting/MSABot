@@ -376,6 +376,73 @@ function action_service_using_info(bot, robot, data, team_name, service)
 	var bot_in_brain = MSABot.getBot(robot, bot);
 	zuul_url = MSABot.getZuul(bot_in_brain, data.channel);
 	
+	//get the service's api list for analyzing
+	var request = require("request");
+	var fs = require("fs");
+	request({
+		url: zuul_url + service + "/v2/api-docs/",
+		method: "GET"
+	}, 
+	function(e,r,b) 
+	{
+		if(e || !b) { return; }
+		console.log(b);
+		var api_json = JSON.parse(b);
+		
+		var api_list = [];
+
+		// get the api list
+		for (var x in api_json.paths) 
+		{
+		   api_list.push(x);
+		}
+		
+		// get the trace data
+		request({
+			url: zuul_url + service + "/trace",
+			method: "GET"
+		}, 
+		function(e,r,b) 
+		{
+			if(e || !b) { return; }
+			console.log(b);
+			var json = JSON.parse(b);
+			
+			var status = [];
+			var status_count = [];
+			var total = 0;
+			// check the response status and update the analyzing data
+			for (var i = 0; i < json.length; i++) 
+			{
+				if(api_list.includes(json[i].info.path))
+				{
+					if(!status.include(json[i].info.headers.response.status))
+					{
+						status.push(json[i].info.headers.response.status);
+						status_count.push(0);
+					}
+					
+					status_count[status.indexOf(json[i].info.headers.response.status)]++;
+					total++;
+				}
+			}
+			
+			var result = "";
+			
+			var index = [];
+
+			
+			pie_chart_data = "{type:'pie',data:{labels:" + status +",datasets:[{data:" + status_count + "}]}}";
+
+			result += "The total using amount is : " + total + "\n";
+			result += "See the pie chart I prepared for you! \n";
+			result += "https://quickchart.io/chart?c=" + pie_chart_data;
+			bot.postMessage(data.channel, result);
+		
+		});
+			
+	});
+	/*
 	var request = require("request");
 	var fs = require("fs");
 	request({
@@ -415,7 +482,7 @@ function action_service_using_info(bot, robot, data, team_name, service)
 		result += "https://quickchart.io/chart?c=" + pie_chart_data;
 		bot.postMessage(data.channel, result);
 	
-	});
+	});*/
 	
 	robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the service overview successfully!");
 }
