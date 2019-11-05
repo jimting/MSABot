@@ -432,7 +432,7 @@ function action_service_using_info(bot, robot, data, team_name, service)
 			var index = [];
 
 			
-			pie_chart_data = "{type:'pie',data:{labels:\"" + status +"\",datasets:[{data:\"" + status_count + "\"}]}}";
+			pie_chart_data = "{type:'pie',data:{labels:[" + status +"],datasets:[{data:[" + status_count + "]}]}}";
 
 			result += "The total using amount is : " + total + "\n";
 			result += "See the pie chart I prepared for you! \n";
