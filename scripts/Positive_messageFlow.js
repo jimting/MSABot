@@ -149,11 +149,11 @@ function checkingSetting(bot, channel)
 	
 	if(checkingArray.length > 0)
 	{
-		result = "Hey, I found that you haven't set up " + checkingArray + " 's url!\n";
+		result = "Hey, I found that you haven't set up " + checkingArray + " 's url in this group!\n";
 		result += "Please use the command \"jenkins/eureka/zuul set {url}\" to set up.\n";
 		result += "(Please set Jenkins's url with the format http://account:password@jenkinsserver)\n";
 		result += "If you have any trouble for using, just use \"@MSABot help\".";
-		bot.postMessage(data.channel, result);
+		bot.bot.postMessage(data.channel, result);
 		return false;
 	}
 	return true;
@@ -233,7 +233,7 @@ function stage1(bot, robot, data, team_name, service, intent)
 		action_bot_help(bot, robot, data, team_name);return;
 	
 	// the url setting checking
-	if(checkingSetting(robot, MSABot.getBot(robot, bot)))
+	if(checkingSetting(robot, MSABot.getBot(robot, bot)) == true)
 	{
 		/* intents that don't need the service name */
 		switch(intent)
