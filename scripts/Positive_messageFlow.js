@@ -136,15 +136,15 @@ function checkingSetting(bot, channel)
 	
 	var checkingArray = [];
 	
-	if(eureka_url)
+	if(!eureka_url)
 	{
 		checkingArray.push("eureka");
 	}
-	if(jenkins_url)
+	if(!jenkins_url)
 	{
 		checkingArray.push("jenkins");
 	}
-	if(zuul_url)
+	if(!zuul_url)
 	{
 		checkingArray.push("zuul");
 	}
