@@ -197,7 +197,10 @@ function stage1(bot, robot, data, team_name, service, intent)
 	
 	// the help func. is out of the url setting~
 	if(intent == "bot_help")
-		action_bot_help(bot, robot, data, team_name);return;
+	{
+		action_bot_help(bot, robot, data, team_name);
+		return;
+	}
 	
 	// the url setting checking
 	if(checkingSetting(robot, MSABot.getBot(robot, bot)))
