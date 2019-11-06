@@ -692,6 +692,7 @@ function action_dependency_graph(bot, robot, data, team_name)
 		var vmamv_url = MSABot.getVMAMV(MSABot.getBot(robot, bot), data.channel);
 		
 		var request = require("request");
+		var fs = require("fs");
 		request({
 			url: vmamv_url + "/web-page/system-names",
 			method: "GET"
@@ -701,29 +702,35 @@ function action_dependency_graph(bot, robot, data, team_name)
 			if(e || !b) { return; }
 			console.log(b);
 			var system_name = b[0];
-			
-			setTimeout(driver.get(vmamv_url), 5000);
-			setTimeout(driver.findElement(By.value(system_name)).click(), 3000);
-			setTimeout(driver.findElement(By.id("download-graph")).click(), 2000);
-			var text = driver.findElement(By.id("download-graph")).getAttribute("href");
-			var base64Data = text.replace(/^data:image\/png;base64,/, "");
-
-			require("fs").writeFile("out.png", base64Data, 'base64', function(err) {
-				console.log(err);
+			driver.get(vmamv_url).then(function() {
+				driver.findElement(By.value(system_name)).click().then(function() {
+					driver.findElement(By.id("download-graph")).click().then(function() {
+						var text = driver.findElement(By.id("download-graph")).getAttribute("href");
+						var base64Data = text.replace(/^data:image\/png;base64,/, "");
+						
+						fs.writeFile("out.png", base64Data, 'base64', function(err) {
+							console.log(err);
+						});
+						request.post({ url: 'https://slack.com/api/files.upload',
+						formData: {
+						  token: bot.data.access_token,
+						  tile: "Image",
+						  filename: "out.png",
+						  filetype: "auto",
+						  channels: data.channel,
+						  file: require('fs').createReadStream('./out.png'),
+							},
+						  }, function (err, response) {
+							  // just for debugging
+							  console.log(response.body);
+						  })
+					});
+				});
+			}).catch(function(err){
+				console.log("test failed with reason "+err)
+				driver.executeScript('lambda-status=failed');
+				driver.quit();
 			});
-			request.post({ url: 'https://slack.com/api/files.upload',
-			formData: {
-			  token: bot.data.access_token,
-			  tile: "Image",
-			  filename: "out.png",
-			  filetype: "auto",
-			  channels: data.channel,
-			  file: require('fs').createReadStream('./out.png'),
-				},
-			  }, function (err, response) {
-				  // just for debugging
-				  console.log(response.body);
-			  })
 		});
 	}
 }
