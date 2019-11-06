@@ -126,40 +126,6 @@ function settingGuide(bot, robot, data, team_name)
 	robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Haven't set up the url.");
 }
 
-function checkingSetting(bot, channel)
-{
-	console.log("<<<<< Start check the url setting");
-	var jenkins_url = MSABot.getJenkins(bot, channel);
-	var eureka_url = MSABot.getEureka(bot, channel);
-	var zuul_url = MSABot.getZuul(bot, channel);
-	
-	var checkingArray = [];
-	
-	if(eureka_url)
-	{
-		checkingArray.push("eureka");
-	}
-	if(jenkins_url)
-	{
-		checkingArray.push("jenkins");
-	}
-	if(zuul_url)
-	{
-		checkingArray.push("zuul");
-	}
-	
-	if(checkingArray.length > 0)
-	{
-		result = "Hey, I found that you haven't set up " + checkingArray + " 's url in this group!\n";
-		result += "Please use the command \"jenkins/eureka/zuul set {url}\" to set up.\n";
-		result += "(Please set Jenkins's url with the format http://account:password@jenkinsserver)\n";
-		result += "If you have any trouble for using, just use \"@MSABot help\".";
-		bot.bot.postMessage(data.channel, result);
-		return false;
-	}
-	return true;
-}
-
 /*===================================*/
 // stage 0 : if analyze no intent, ask the intent, if have, go stage1 
 // stage 1 : analyze the intent result, if have service name, skip stage2 to mission | if the intent doesn't need the service name, go to stage3
@@ -286,6 +252,41 @@ function stage2(bot, robot, data, team_name, intent)
 	bot.postMessage(data.channel, result);
 	
 	//end the flow
+}
+
+
+function checkingSetting(bot, channel)
+{
+	console.log("<<<<< Start check the url setting");
+	var jenkins_url = MSABot.getJenkins(bot, channel);
+	var eureka_url = MSABot.getEureka(bot, channel);
+	var zuul_url = MSABot.getZuul(bot, channel);
+	
+	var checkingArray = [];
+	
+	if(eureka_url)
+	{
+		checkingArray.push("eureka");
+	}
+	if(jenkins_url)
+	{
+		checkingArray.push("jenkins");
+	}
+	if(zuul_url)
+	{
+		checkingArray.push("zuul");
+	}
+	
+	if(checkingArray.length > 0)
+	{
+		result = "Hey, I found that you haven't set up " + checkingArray + " 's url in this group!\n";
+		result += "Please use the command \"jenkins/eureka/zuul set {url}\" to set up.\n";
+		result += "(Please set Jenkins's url with the format http://account:password@jenkinsserver)\n";
+		result += "If you have any trouble for using, just use \"@MSABot help\".";
+		bot.bot.postMessage(data.channel, result);
+		return false;
+	}
+	return true;
 }
 
 /* Dev Status : true */
