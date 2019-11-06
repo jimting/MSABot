@@ -123,6 +123,7 @@ function settingGuide(bot, robot, data, team_name)
 	result += "(Please set Jenkins's url with the format http://account:password@jenkinsserver)\n";
 	result += "If you have any trouble for using, just use \"@MSABot help\".";
 	bot.postMessage(data.channel, result);
+	robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Haven't set up the url.");
 }
 
 /*===================================*/
