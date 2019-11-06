@@ -128,6 +128,7 @@ function settingGuide(bot, robot, data, team_name)
 
 function checkingSetting(bot, channel)
 {
+	console.log("<<<<< Start check the url setting");
 	var jenkins_url = MSABot.getJenkins(bot, channel);
 	var eureka_url = MSABot.getEureka(bot, channel);
 	var zuul_url = MSABot.getZuul(bot, channel);
