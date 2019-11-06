@@ -38,6 +38,16 @@ exports.setZuul =  function(robot, bot, channel, url)
    setZuul(robot, bot, channel, url);
 }
 
+exports.setVMAMV =  function(robot, bot, channel, url)
+{
+   setVMAMV(robot, bot, channel, url);
+}
+
+exports.getVMAMV =  function(bot, channel)
+{
+   return getVMAMV(bot, channel);
+}
+
 exports.getEureka =  function(bot, channel)
 {
    return getEureka(bot, channel);
@@ -290,6 +300,7 @@ var setZuul = function(robot, bot, channel, url)
 		db.close();
     }); 
 }
+
 var renewBotData = function(robot, data)
 {
 	var bots = robot.brain.get('bots');
@@ -340,6 +351,45 @@ var getZuul = function(bot, channel)
 		if(zuul[i].channel == channel)
 		{
 			return zuul[i].url;
+		}
+	}
+	return null;
+}
+
+var setVMAMV = function(robot, bot, channel, url)
+{
+	MongoClient.connect(userDB, { useNewUrlParser: false }, function(err, db) {
+        if (err) throw err;
+		var data = bot.data;
+		//remove old data
+		for(var i = 0; i < data.vmamv.length; i++)
+		{
+			if(data.vmamv[i].channel == channel)
+			{
+				data.vmamv.splice(i, 1);
+				break;
+			}
+		}
+		
+		data.vmamv.push({"channel":channel,"url":url.replace("<", "").replace(">", "")});
+		
+        var dbo = db.db("apuser"); 
+		var myquery = {team_name: bot.data.team_name};
+		var newvalues = { $set: {vmamv:data.vmamv} };
+		dbo.collection("apuser").updateOne(myquery, newvalues, {upsert: true});
+		renewBotData(robot, data);
+		db.close();
+    }); 
+}
+
+var getVMAMV = function(bot, channel)
+{
+	var vmamv = bot.data.vmamv
+	for(var i = 0;i < vmamv.length; i++)
+	{
+		if(vmamv[i].channel == channel)
+		{
+			return vmamv[i].url;
 		}
 	}
 	return null;

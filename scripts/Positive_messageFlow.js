@@ -95,6 +95,26 @@ function commandAnalyze(bot, robot, data, team_name)
 					}
 				}
 				break;
+			case "vmamv":
+				var intent = result[2];
+				if(intent != null)
+				{
+					switch(intent)
+					{
+						case "url":
+							var url = MSABot.getVMAMV(bot_in_brain, data.channel);
+							if(url != null)
+								bot.postMessage(data.channel, "The channel's VMAMV URL is : " + url);
+							else
+								bot.postMessage(data.channel, "This channel doesn't set the VMAMV Url.");
+							break;
+						case "set":
+							MSABot.setVMAMV(robot, bot_in_brain, data.channel, result[3]);
+							bot.postMessage(data.channel, "Successfully setting the VMAMV server.");
+							break;
+					}
+				}
+				break;
 		}
 	}
 }
@@ -143,6 +163,23 @@ function checkingSetting(bot, channel)
 		result = "Hey, I found that you haven't set up " + checkingArray + " 's url in this group!\n";
 		result += "Please use the command \"jenkins/eureka/zuul set {url}\" to set up.\n";
 		result += "(Please set Jenkins's url with the format http://account:password@jenkinsserver)\n";
+		result += "If you have any trouble for using, just use \"@MSABot help\".";
+		bot.bot.postMessage(channel, result);
+		return false;
+	}
+	return true;
+}
+
+/* if user's VMAMV url setting is not done , just give them some guides (´c_`) */
+function checkingVMAMV(bot, channel)
+{
+	console.log("<<<<< Start check the VMAMV url setting");
+	var VMAMV_url = MSABot.getVMAMV(bot, channel);
+
+	if(!VMAMV_url)
+	{
+		result = "Hey, I found that you haven't set up VMAMV's url in this group!\n";
+		result += "Please use the command \"VMAMV set {url}\" to set up.\n";
 		result += "If you have any trouble for using, just use \"@MSABot help\".";
 		bot.bot.postMessage(channel, result);
 		return false;
@@ -224,6 +261,7 @@ function stage1(bot, robot, data, team_name, service, intent)
 	{
 		case "bot_help" : action_bot_help(bot, robot, data, team_name);return;
 		case "bot_join" : action_bot_join(bot, robot, data, team_name);return;
+		case "action_dependency_graph": action_dependency_graph(bot, robot, data, team_name);return;
 	}
 	
 	// the url setting checking
@@ -296,8 +334,8 @@ function action_bot_help(bot, robot, data, team_name)
 	using_guide += "(Not yet)7. Search the connection status on Eureka. ex. @MSABot Tell me the connection error about ServiceA.\n";
 	using_guide += "(Not yet)8. Get the dependency graph from VMAMV.	ex. @MSABot give me the dependency graph.\n";
 	using_guide += "** Change your server setting **\n";
-	using_guide += "8. Set the Eureka/Jenkins/Zuul Url. ex. \"eureka/jenkins/zuul set http://...\" \n";
-	using_guide += "9. Get the Eureka/Jenkins/Zuul Url. ex. \"eureka/jenkins/zuul url\"";
+	using_guide += "8. Set the Eureka/Jenkins/Zuul/VMAMV Url. ex. \"eureka/jenkins/zuul/vmamv set http://...\" \n";
+	using_guide += "9. Get the Eureka/Jenkins/Zuul/VMAMV Url. ex. \"eureka/jenkins/zuul/vmamv url\"";
 	
 	bot.postMessage(data.channel, using_guide);
 }
@@ -637,4 +675,55 @@ function action_service_env(bot, robot, data, team_name)
 	
 	});
 	robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the env information successfully!");
+}
+
+function action_dependency_graph(bot, robot, data, team_name)
+{
+	if(checkingVMAMV)
+	{
+		var webdriver = require('selenium-webdriver'),
+		By = webdriver.By,
+		until = webdriver.until;
+
+		var driver = new webdriver.Builder()
+			.forBrowser('chrome')
+			.build();
+		
+		var vmamv_url = getVMAMV(MSABot.getBot(robot, bot), data.channel);
+		
+		var request = require("request");
+		request({
+			url: vmamv_url + "/web-page/system-names",
+			method: "GET"
+		}, 
+		function(e,r,b) 
+		{
+			if(e || !b) { return; }
+			console.log(b);
+			var system_name = b[0];
+			
+			setTimeout(driver.get(vmamv_url), 5000);
+			setTimeout(driver.findElement(By.value(system_name)).click(), 3000);
+			setTimeout(driver.findElement(By.id("download-graph")).click(), 2000);
+			var text = driver.findElement(By.id("download-graph")).getAttribute("href");
+			var base64Data = text.replace(/^data:image\/png;base64,/, "");
+
+			require("fs").writeFile("out.png", base64Data, 'base64', function(err) {
+				console.log(err);
+			});
+			request.post({ url: 'https://slack.com/api/files.upload',
+			formData: {
+			  token: bot.data.access_token,
+			  tile: "Image",
+			  filename: "out.png",
+			  filetype: "auto",
+			  channels: data.channel,
+			  file: require('fs').createReadStream('./out.png'),
+			},
+		  }, function (err, response) {
+			  // just for debugging
+			  console.log(response.body);
+		  })};
+		}
+	}
 }
