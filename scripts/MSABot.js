@@ -60,10 +60,10 @@ exports.getBot =  function(robot, bot)
 
 exports.checkSetting =  function(robot, bot)
 {
-   return checkURLSettingStatus(robot, bot, false);
+   return checkSetting(robot, bot, false);
 }
 
-var checkURLSettingStatus = function(robot, bot, ifReply)
+var checkSetting = function(robot, bot, ifReply)
 {
 	var eureka = bot.data.eureka;
 	var jenkins = bot.data.jenkins;
@@ -122,7 +122,7 @@ var initBot = function(robot)
                 // create a bot
                 var bot = newBot(token, name, robot, team, false);
                 var tempBot = {bot:bot, token:token, name:name, data:botData[i]};
-				checkURLSettingStatus(robot, tempBot, true);
+				checkSetting(robot, tempBot, true);
                 bots.push(tempBot);
             }
             robot.brain.set("reconnect_count", 0);
