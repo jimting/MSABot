@@ -13,6 +13,11 @@ exports.initBot =  function(robot)
    initBot(robot);
 }
 
+exports.newBot =  function(token, name, robot, team_name)
+{
+   newBot(token, name, robot, team_name, true);
+}
+
 exports.resetBot =  function(robot)
 {
    resetBot(robot);
@@ -53,18 +58,40 @@ exports.getBot =  function(robot, bot)
    return getBot(robot, bot);
 }
 
-var checkURLSettingStatus = function(robot, bot)
+exports.checkSetting =  function(robot, bot)
+{
+   return checkURLSettingStatus(robot, bot, false);
+}
+
+var checkURLSettingStatus = function(robot, bot, ifReply)
 {
 	var eureka = bot.data.eureka;
 	var jenkins = bot.data.jenkins;
+	var zuul = bot.data.zuul;
+	var checkingArray = [];
+	
 	if( eureka.length == 0)
 	{
-		bot.bot.postMessageToChannel('general', "Hey, I found that this group has no eureka url set up. \nPlease use \"eureka set http://...\" to set the url for these channels that would contact with eureka.");
+		checkingArray.push("eureka");
 	}
 	if( jenkins.length == 0)
 	{
-		bot.bot.postMessageToChannel('general', "Hey, I found that this group has no Jenkins url set up. \nPlease use \"jenkins set http://...\" to set the url for these channels that would contact with Jenkins.");
+		checkingArray.push("jenkins");
 	}
+	if( eureka.length == 0)
+	{
+		checkingArray.push("zuul");
+	}
+	var result = "Hey, I fount that this group has no " + checkingArray + "url set up. \nPlease use \"eureka|jenkins|zuul set http://...\" to set the url for your channels.\nIf you have any trouble, just use \"@MSABot help\".";
+	
+	if(checkingArray.length>0 && ifReply)
+	{
+		bot.bot.postMessageToChannel('general', result);
+		return false;
+	}
+	
+	return true;
+	
 }
 
 var initBot = function(robot)
@@ -92,9 +119,9 @@ var initBot = function(robot)
 				var jenkins = botData[i].jenkins;
 				
                 // create a bot
-                var bot = newBot(token, name, robot, team);
+                var bot = newBot(token, name, robot, team, false);
                 var tempBot = {bot:bot, token:token, name:name, data:botData[i]};
-				checkURLSettingStatus(robot, tempBot);
+				checkURLSettingStatus(robot, tempBot, true);
                 bots.push(tempBot);
             }
             robot.brain.set("reconnect_count", 0);
@@ -106,7 +133,7 @@ var initBot = function(robot)
     }); 
 }
 
-var newBot = function(token, name, robot, team_name)
+var newBot = function(token, name, robot, team_name, isInstall)
 {
     var hubotAnalyze = require('./Positive_messageFlow').hubotAnalyze;
     var SlackBot = require('slackbots');
@@ -119,7 +146,11 @@ var newBot = function(token, name, robot, team_name)
         // define channel, where bot exist. You can adjust it there https://my.slack.com/services 
         var welcome = ['我又回來了。請先停看聽。', '振作起來好嗎。我剛回來。', '我的老天鵝。我回來了。', '我回來了。', '我回來了。派對收攤。', '我又來了。期待您的使用 ( ͡° ͜ʖ ͡°)', '安安', '嗖。 我剛剛著陸下來。','我剛回來。 可以幫我補血嗎？','挑戰者來了，我 來 也！','我來了。 請給我一罐啤酒。','嘿！快聽！我回來了！', '我剛回來。 似乎太 OP - 請 nerf 一下。', '一個人走很危險，跟我一起走吧！', '我上來了！我又下去了！我又上來了！怎麼樣！我可以一直上來下來！很厲害吧！', '槓上開花加一台（主機）'];
         var welcomeRandom = Math.floor(Math.random()*(welcome.length-1));
-        //bot.postMessageToChannel('general', "[機器人重新連線]"+welcome[welcomeRandom]);
+		if(isInstall)
+		{
+			bot.postMessageToChannel('general', "Hi, I'm MSABot. I can assist you to look out the service you're developing and maintaining. \n Thank for your installing!\n Use @MSABot help to figure out how to use me!");
+			
+		}
     });
     bot.on('message', function(data) 
     {

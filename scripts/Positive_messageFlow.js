@@ -115,6 +115,13 @@ function mentionAndAnalyze(bot, robot, data, team_name)
 		return false;
 }
 
+/* Check if user's url setting is done */
+function settingCheck(bot, robot, data, team_name)
+{
+	
+}
+
+
 /*===================================*/
 // stage 0 : if analyze no intent, ask the intent, if have, go stage1 
 // stage 1 : analyze the intent result, if have service name, skip stage2 to mission | if the intent doesn't need the service name, go to stage3
