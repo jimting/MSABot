@@ -258,6 +258,7 @@ function action_bot_help(bot, robot, data, team_name)
 }
 
 /* Dev Status : true */
+/* Jenkins api */
 /* send the service's last failed build data to user */
 function action_build_fail(bot, robot, data, team_name, service)
 {
@@ -280,6 +281,7 @@ function action_build_fail(bot, robot, data, team_name, service)
 }
 
 /* Dev Status : false */
+/* Eureka api */
 /* send the service's connection error data to user */
 function action_connect_error(bot, robot, data, team_name, service)
 {
@@ -291,6 +293,7 @@ function action_connect_error(bot, robot, data, team_name, service)
 }
 
 /* Dev Status : true */
+/* Eureka api */
 /* send service's health data to user */
 function action_service_health(bot, robot, data, team_name)
 {
@@ -319,13 +322,14 @@ function action_service_health(bot, robot, data, team_name)
 			result += (i+1) + ". " + applications.eq(i).find('name').eq(0).text() + " : " + applications.eq(i).find('status').text() + "\n";
 		}
 		
-		bot.postMessage(data.channel, "Here are the services' health status : \n" + result);
+		bot.postMessage(data.channel, "Here are the services' health status : \n" + result + "\n(The data was collected from your Eureka server.)");
 		
 		robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the service health information successfully!");
 	});
 }
 
 /* Dev Status : true */
+/* Zuul and Actuator api */
 /* send service's info to user */
 function action_service_info(bot, robot, data, team_name, service)
 {
@@ -359,7 +363,7 @@ function action_service_info(bot, robot, data, team_name, service)
 		result += "Total commit count : " + json.git.total.commit.count + "\n";
 		
 		result += "See detail information on Swagger! : " + zuul_url + service + "/swagger-ui.html";
-		bot.postMessage(data.channel, result);
+		bot.postMessage(data.channel, result + "\n(The data was collected from your Zuul server and Actuator api.)");
 	
 	});
 	
@@ -367,6 +371,7 @@ function action_service_info(bot, robot, data, team_name, service)
 }
 
 /* Dev Status : true */
+/* Zuul, Swagger and Actuator api */
 /* send service's using_info to user */
 function action_service_using_info(bot, robot, data, team_name, service)
 {
@@ -437,7 +442,7 @@ function action_service_using_info(bot, robot, data, team_name, service)
 			result += "The total using amount is : " + total + "\n";
 			result += "See the pie chart I prepared for you! \n";
 			result += "https://quickchart.io/chart?c=" + pie_chart_data;
-			bot.postMessage(data.channel, result);
+			bot.postMessage(data.channel, result + "\n(The data was collected from your Zuul server, Swagger and Actuator api.)");
 		
 		});
 			
@@ -488,6 +493,7 @@ function action_service_using_info(bot, robot, data, team_name, service)
 }
 
 /* Dev Status : true */
+/* Zuul and swagger */
 /* send service's api list to user */
 function action_service_api_list(bot, robot, data, team_name, service)
 {
@@ -527,7 +533,7 @@ function action_service_api_list(bot, robot, data, team_name, service)
 		}
 		
 		result += "See detail information on Swagger! : " + zuul_url + service + "/swagger-ui.html";
-		bot.postMessage(data.channel, result);
+		bot.postMessage(data.channel, result + "\n(The data was collected from your Zuul server and Swagger api.)");
 	
 	});
 	
@@ -535,6 +541,7 @@ function action_service_api_list(bot, robot, data, team_name, service)
 }
 
 /* Dev Status : true */
+/* Eureka server */
 /* send the env setting data to user */
 function action_service_env(bot, robot, data, team_name)
 {
@@ -574,7 +581,7 @@ function action_service_env(bot, robot, data, team_name)
 			result += "The env "+ index[i] +" is : " + json[properties][index[i]] + "\n";
 		}
 		
-		bot.postMessage(data.channel, result);
+		bot.postMessage(data.channel, result + "\n(The data was collected from your Eureka server.)");
 	
 	});
 	robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Sending the env information successfully!");
