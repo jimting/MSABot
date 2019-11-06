@@ -233,7 +233,7 @@ function stage1(bot, robot, data, team_name, service, intent)
 		action_bot_help(bot, robot, data, team_name);return;
 	
 	// the url setting checking
-	if(checkingSetting(robot, MSABot.getBot(robot, bot)) == true)
+	if(checkingSetting(robot, MSABot.getBot(robot, bot)))
 	{
 		/* intents that don't need the service name */
 		switch(intent)
