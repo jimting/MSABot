@@ -719,11 +719,12 @@ function action_dependency_graph(bot, robot, data, team_name)
 			  filetype: "auto",
 			  channels: data.channel,
 			  file: require('fs').createReadStream('./out.png'),
-			},
-		  }, function (err, response) {
-			  // just for debugging
-			  console.log(response.body);
-		  })};
+				},
+			  }, function (err, response) {
+				  // just for debugging
+				  console.log(response.body);
+			  })
+		});
 		}
 	}
 }
