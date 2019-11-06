@@ -125,7 +125,6 @@ function settingGuide(bot, robot, data, team_name)
 	bot.postMessage(data.channel, result);
 }
 
-
 /*===================================*/
 // stage 0 : if analyze no intent, ask the intent, if have, go stage1 
 // stage 1 : analyze the intent result, if have service name, skip stage2 to mission | if the intent doesn't need the service name, go to stage3

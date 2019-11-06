@@ -86,7 +86,8 @@ var checkURLSettingStatus = function(robot, bot, ifReply)
 	
 	if(checkingArray.length>0 && ifReply)
 	{
-		bot.bot.postMessageToChannel('general', result);
+		if(ifReply)
+			bot.bot.postMessageToChannel('general', result);
 		return false;
 	}
 	
