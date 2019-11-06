@@ -285,7 +285,7 @@ function stage2(bot, robot, data, team_name, intent)
 /* using guide for MSABot */
 function action_bot_help(bot, robot, data, team_name)
 {
-	var using_guide = "Hi, I'm MSABot. I can assist you to look out the service you're developing and maintaining.\nHow to use me? : \n";
+	var using_guide = "How to use me? : \n";
 	using_guide += "** Catch your service information **\n";
 	using_guide += "1. Search the services' health data. ex. @MSABot I want the health data.\n";
 	using_guide += "2. Search the service's information. ex. @MSABot I want the information for ServiceA.\n";
@@ -304,7 +304,7 @@ function action_bot_help(bot, robot, data, team_name)
 
 /* Dev Status : true */
 /* MSABot join and send hello message to this channel */
-function action_bot_help(bot, robot, data, team_name)
+function action_bot_join(bot, robot, data, team_name)
 {
 	bot.postMessage(data.channel, "Hi, I'm MSABot. I can assist you to look out the service you're developing and maintaining. \n Use @MSABot help to figure out how to use me!");
 }
