@@ -725,6 +725,5 @@ function action_dependency_graph(bot, robot, data, team_name)
 				  console.log(response.body);
 			  })
 		});
-		}
 	}
 }
