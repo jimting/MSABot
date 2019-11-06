@@ -689,7 +689,7 @@ function action_dependency_graph(bot, robot, data, team_name)
 			.forBrowser('chrome')
 			.build();
 		
-		var vmamv_url = getVMAMV(MSABot.getBot(robot, bot), data.channel);
+		var vmamv_url = MSABot.getVMAMV(MSABot.getBot(robot, bot), data.channel);
 		
 		var request = require("request");
 		request({
