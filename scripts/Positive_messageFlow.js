@@ -116,17 +116,6 @@ function mentionAndAnalyze(bot, robot, data, team_name)
 }
 
 /* if user's url setting is not done , just give them some guides (´c_`) */
-function settingGuide(bot, robot, data, team_name)
-{
-	result = "Hey, I found that you haven't set up Jenkins, eureka and zuul server!\n";
-	result += "Please use the command \"jenkins/eureka/zuul set {url}\" to set up.\n";
-	result += "(Please set Jenkins's url with the format http://account:password@jenkinsserver)\n";
-	result += "If you have any trouble for using, just use \"@MSABot help\".";
-	bot.postMessage(data.channel, result);
-	robot.send(admin_data,"("+team_name+") [CHANNEL:"+data.channel+"] Haven't set up the url.");
-}
-
-
 function checkingSetting(bot, channel)
 {
 	console.log("<<<<< Start check the url setting");
@@ -230,11 +219,11 @@ function stage1(bot, robot, data, team_name, service, intent)
 	robot.brain.set("stage"+data.channel, 1);
 	robot.brain.set("intent"+data.channel, intent);
 	
-	// the help func. is out of the url setting~
-	if(intent == "bot_help")
+	// some funcs which are out of the url setting~
+	switch(intent)
 	{
-		action_bot_help(bot, robot, data, team_name);
-		return;
+		case "bot_help" : action_bot_help(bot, robot, data, team_name);return;
+		case "bot_join" : action_bot_join(bot, robot, data, team_name);return;
 	}
 	
 	// the url setting checking
@@ -311,6 +300,13 @@ function action_bot_help(bot, robot, data, team_name)
 	using_guide += "9. Get the Eureka/Jenkins/Zuul Url. ex. \"eureka/jenkins/zuul url\"";
 	
 	bot.postMessage(data.channel, using_guide);
+}
+
+/* Dev Status : true */
+/* MSABot join and send hello message to this channel */
+function action_bot_help(bot, robot, data, team_name)
+{
+	bot.postMessage(data.channel, "Hi, I'm MSABot. I can assist you to look out the service you're developing and maintaining. \n Use @MSABot help to figure out how to use me!");
 }
 
 /* Dev Status : true */
