@@ -82,7 +82,7 @@ var checkURLSettingStatus = function(robot, bot, ifReply)
 	{
 		checkingArray.push("zuul");
 	}
-	var result = "Hey, I fount that this group has no " + checkingArray + "url set up. \nPlease use \"eureka|jenkins|zuul set http://...\" to set the url for your channels.\nIf you have any trouble, just use \"@MSABot help\".";
+	var result = "Hey, I fount that this group has no " + checkingArray + " url set up. \nPlease use \"eureka|jenkins|zuul set http://...\" to set the url for your channels.\nIf you have troubles, just use \"@MSABot help\".";
 	
 	if(checkingArray.length>0 && ifReply)
 	{

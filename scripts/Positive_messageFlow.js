@@ -115,10 +115,14 @@ function mentionAndAnalyze(bot, robot, data, team_name)
 		return false;
 }
 
-/* Check if user's url setting is done */
-function settingCheck(bot, robot, data, team_name)
+/* if user's url setting is not done , just give them some guides (´c_`) */
+function settingGuide(bot, robot, data, team_name)
 {
-	
+	result = "Hey, I found that you haven't set up Jenkins, eureka and zuul server!\n";
+	result += "Please use the command \"jenkins/eureka/zuul set {url}\" to set up.\n";
+	result += "(Please set Jenkins's url with the format http://account:password@jenkinsserver)\n";
+	result += "If you have any trouble for using, just use \"@MSABot help\".";
+	bot.postMessage(data.channel, result);
 }
 
 
@@ -191,32 +195,41 @@ function stage1(bot, robot, data, team_name, service, intent)
 	robot.brain.set("stage"+data.channel, 1);
 	robot.brain.set("intent"+data.channel, intent);
 	
-	/* intents that don't need the service name */
-	switch(intent)
+	// the help func. is out of the url setting~
+	if(intent == "bot_help")
+		action_bot_help(bot, robot, data, team_name);return;
+	
+	// the url setting checking
+	if(MSABot.checkSetting(robot, MSABot.getBot(robot, bot)))
 	{
-		case "action_service_env"		:action_service_env(bot, robot, data, team_name);return;
-		case "bot_help" : action_bot_help(bot, robot, data, team_name);return;
-		case "action_service_health"	:action_service_health(bot, robot, data, team_name);return;
-		default : break;
-	}
-
-	/* if have no service name, ask them the service name */
-	if(service=="none" || service==null)
-	{
-		stage2(bot, robot, data, team_name, intent);
-	}
-	else /* if have, go to stage3 */
-	{
+		/* intents that don't need the service name */
 		switch(intent)
 		{
-			case "action_detail_api"		:action_detail_api(bot, robot, data, team_name, service);return;
-			case "action_connect_error"		:action_connect_error(bot, robot, data, team_name, service);return;
-			case "action_build_fail"		:action_build_fail(bot, robot, data, team_name, service);return;
-			case "action_service_info"		:action_service_info(bot, robot, data, team_name, service);return;
-			case "action_service_using_info":action_service_using_info(bot, robot, data, team_name, service);return;
-			case "action_service_api_list"	:action_service_api_list(bot, robot, data, team_name, service);return;
+			case "action_service_env"		:action_service_env(bot, robot, data, team_name);return;
+			case "action_service_health"	:action_service_health(bot, robot, data, team_name);return;
+			default : break;
+		}
+
+		/* if have no service name, ask them the service name */
+		if(service=="none" || service==null)
+		{
+			stage2(bot, robot, data, team_name, intent);
+		}
+		else /* if have, go to stage3 */
+		{
+			switch(intent)
+			{
+				case "action_detail_api"		:action_detail_api(bot, robot, data, team_name, service);return;
+				case "action_connect_error"		:action_connect_error(bot, robot, data, team_name, service);return;
+				case "action_build_fail"		:action_build_fail(bot, robot, data, team_name, service);return;
+				case "action_service_info"		:action_service_info(bot, robot, data, team_name, service);return;
+				case "action_service_using_info":action_service_using_info(bot, robot, data, team_name, service);return;
+				case "action_service_api_list"	:action_service_api_list(bot, robot, data, team_name, service);return;
+			}
 		}
 	}
+	else
+		settingGuide(bot, robot, data, team_name);
 }
 
 /* to ask user what service he/she wants */
