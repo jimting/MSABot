@@ -58,11 +58,6 @@ exports.getBot =  function(robot, bot)
    return getBot(robot, bot);
 }
 
-exports.checkSetting =  function(robot, bot)
-{
-   return checkSetting(robot, bot, false);
-}
-
 var checkSetting = function(robot, bot, ifReply)
 {
 	var eureka = bot.data.eureka;
@@ -78,7 +73,7 @@ var checkSetting = function(robot, bot, ifReply)
 	{
 		checkingArray.push("jenkins");
 	}
-	if( eureka.length == 0)
+	if( zuul.length == 0)
 	{
 		checkingArray.push("zuul");
 	}
