@@ -7,7 +7,7 @@
 var admin_data = { "room": process.env.adminRoom, "user_id": process.env.adminID};
 var MSABot = require('./MSABot');
 var jenkinsapi = require('jenkins-api');
-
+const {Builder, By, Key, until} = require('selenium-webdriver');
 
 exports.hubotAnalyze =  function(bot, robot, data, team_name)
 {
@@ -702,35 +702,70 @@ function action_dependency_graph(bot, robot, data, team_name)
 			if(e || !b) { return; }
 			console.log(b);
 			var system_name = b[0];
-			driver.get(vmamv_url).then(function() {
-				driver.findElement(By.value(system_name)).click().then(function() {
-					driver.findElement(By.id("download-graph")).click().then(function() {
-						var text = driver.findElement(By.id("download-graph")).getAttribute("href");
-						var base64Data = text.replace(/^data:image\/png;base64,/, "");
-						
-						fs.writeFile("out.png", base64Data, 'base64', function(err) {
-							console.log(err);
-						});
-						request.post({ url: 'https://slack.com/api/files.upload',
-						formData: {
-						  token: bot.data.access_token,
-						  tile: "Image",
-						  filename: "out.png",
-						  filetype: "auto",
-						  channels: data.channel,
-						  file: require('fs').createReadStream('./out.png'),
-							},
-						  }, function (err, response) {
-							  // just for debugging
-							  console.log(response.body);
-						  })
-					});
-				});
-			}).catch(function(err){
-				console.log("test failed with reason "+err)
-				driver.executeScript('lambda-status=failed');
-				driver.quit();
-			});
+			bot.postMessage(data.channel, "Start to get the denpency graph from VMAMV : (System-name : " + system_name + ")");
+			getVMAMVGraphBase64(bot, data, vmamv_url, system_name);
 		});
 	}
+}
+
+async function getVMAMVGraphBase64(bot, data, url, system_name) {
+	let driver = await new Builder()
+        .forBrowser('firefox')
+        .build();
+
+	await driver.get(url);
+	
+	await driver.manage().window().maximize();
+	
+	await driver.findElement(By.xpath("//button[@id='systemsDropdownMenuButton']")).click();
+	console.log("<< Show the Service List!");
+	
+	//await sleep(2000);
+  
+	await driver.findElement(By.xpath("//button[@value='"+system_name+"']")).click();
+	console.log("<< Select the "+system_name+" and show the graph!");
+	
+	await sleep(5000);
+	driver.executeScript('document.body.style.MozTransform = "scale(1.0)";');
+	console.log("<< mouse scroll down.");
+
+	await driver.findElement(By.xpath("//button[@id='system-options-menu-button']/span")).click();
+	console.log("<< Open the hambur list.");
+	
+	await sleep(4000);
+  
+	await driver.findElement(By.xpath("//a[@id='download-graph']")).click();
+	console.log("<< Click the download button.");
+	
+	//await sleep(2000);
+	
+	const text = await driver.findElement(By.xpath("//a[@id='download-graph']")).getAttribute("href");
+	console.log(">> Get the href.");
+	
+	const picUrl = await imgurUpload(text.replace("data:image/png;base64,",""));
+	
+	return picUrl;
+
+
+}
+
+function sleep(millis) {
+	console.log("<< Wait for seconds.");
+    return new Promise(resolve => setTimeout(resolve, millis));
+}
+
+function imgurUpload(base64)
+{
+	
+var imgur = require('imgur');
+imgur.setClientId('b9fe259fe23436f');
+imgur.uploadBase64(base64)
+    .then(function (json) {
+        console.log(json.data.link);
+		return json.data.link;
+    })
+    .catch(function (err) {
+        console.error(err.message);
+		return null;
+    });
 }
