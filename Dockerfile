@@ -10,50 +10,39 @@ RUN useradd hubot -m
 
 RUN npm install -g hubot coffee-script yo generator-hubot
 
+# Install the latest version of Firefox:
+RUN export DEBIAN_FRONTEND=noninteractive \
+  && apt-get update \
+  && apt-get install --no-install-recommends --no-install-suggests -y \
+    # Firefox dependencies:
+    libgtk-3-0 \
+    libdbus-glib-1-2 \
+    bzip2 \
+  && DL='https://download.mozilla.org/?product=firefox-latest-ssl&os=linux64' \
+  && curl -sL "$DL" | tar -xj -C /opt \
+  && ln -s /opt/firefox/firefox /usr/local/bin/ \
+  # Remove obsolete files:
+  && apt-get autoremove --purge -y \
+    bzip2 \
+  && apt-get clean \
+  && rm -rf \
+    /tmp/* \
+    /usr/share/doc/* \
+    /var/cache/* \
+    /var/lib/apt/lists/* \
+    /var/tmp/*
 
-#=========
-# Firefox
-#=========
-ARG FIREFOX_VERSION=latest
-CMD FIREFOX_DOWNLOAD_URL=$(if [ $FIREFOX_VERSION = "latest" ] || [ $FIREFOX_VERSION = "nightly-latest" ] || [ $FIREFOX_VERSION = "devedition-latest" ]; then echo "https://download.mozilla.org/?product=firefox-$FIREFOX_VERSION-ssl&os=linux64&lang=en-US"; else echo "https://download-installer.cdn.mozilla.net/pub/firefox/releases/$FIREFOX_VERSION/linux-x86_64/en-US/firefox-$FIREFOX_VERSION.tar.bz2"; fi) \
-  && apt-get update -qqy \
-  && apt-get -qqy --no-install-recommends install firefox \
-  && rm -rf /var/lib/apt/lists/* /var/cache/apt/* \
-  && wget --no-verbose -O /tmp/firefox.tar.bz2 $FIREFOX_DOWNLOAD_URL \
-  && apt-get -y purge firefox \
-  && rm -rf /opt/firefox \
-  && tar -C /opt -xjf /tmp/firefox.tar.bz2 \
-  && rm /tmp/firefox.tar.bz2 \
-  && mv /opt/firefox /opt/firefox-$FIREFOX_VERSION \
-  && ln -fs /opt/firefox-$FIREFOX_VERSION/firefox /usr/bin/firefox
+# Install the latest version of Geckodriver:
+RUN BASE_URL=https://github.com/mozilla/geckodriver/releases/download \
+  && VERSION=$(curl -sL \
+    https://api.github.com/repos/mozilla/geckodriver/releases/latest | \
+    grep tag_name | cut -d '"' -f 4) \
+  && curl -sL "$BASE_URL/$VERSION/geckodriver-$VERSION-linux64.tar.gz" | \
+    tar -xz -C /usr/local/bin
 
-#============
-# GeckoDriver
-#============
-ARG GECKODRIVER_VERSION=latest
-CMD GK_VERSION=$(if [ ${GECKODRIVER_VERSION:-latest} = "latest" ]; then echo "0.26.0"; else echo $GECKODRIVER_VERSION; fi) \
-  && echo "Using GeckoDriver version: "$GK_VERSION \
-  && wget --no-verbose -O /tmp/geckodriver.tar.gz https://github.com/mozilla/geckodriver/releases/download/v$GK_VERSION/geckodriver-v$GK_VERSION-linux64.tar.gz \
-  && rm -rf /opt/geckodriver \
-  && tar -C /opt -zxf /tmp/geckodriver.tar.gz \
-  && rm /tmp/geckodriver.tar.gz \
-  && mv /opt/geckodriver /opt/geckodriver-$GK_VERSION \
-  && chmod 755 /opt/geckodriver-$GK_VERSION \
-  && ln -fs /opt/geckodriver-$GK_VERSION /usr/bin/geckodriver
+USER webdriver
 
-USER seluser
-
-COPY generate_config /opt/bin/generate_config
-
-# Generating a default config during build time
-RUN /opt/bin/generate_config > /opt/selenium/config.json
-
-#==========
-# Relaxing permissions for OpenShift and other non-sudo environments
-#==========
-CMD sudo chmod -R 777 ${HOME} \
-  && sudo chgrp -R 0 ${HOME} \
-  && sudo chmod -R g=u ${HOME}
+ENTRYPOINT ["entrypoint", "geckodriver"]
 
 USER hubot
 
