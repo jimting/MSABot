@@ -696,7 +696,7 @@ function action_dependency_graph(bot, robot, data, team_name)
 		function(e,r,b) 
 		{
 			if(e || !b) { return; }
-			var system_name = b.replace("[", "").replace("]", "").replace("\"", "");
+			var system_name = b.replace("[\"", "").replace("\"]", "");
 			console.log(system_name);
 			
 			bot.postMessage(data.channel, "Start to get the denpency graph from VMAMV : (System-name : " + system_name + ")");
