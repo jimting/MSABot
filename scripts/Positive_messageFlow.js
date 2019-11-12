@@ -686,18 +686,9 @@ function action_dependency_graph(bot, robot, data, team_name)
 {
 	if(checkingVMAMV)
 	{
-		var webdriver = require('selenium-webdriver'),
-		By = webdriver.By,
-		until = webdriver.until;
-
-		var driver = new webdriver.Builder()
-			.forBrowser('chrome')
-			.build();
-		
 		var vmamv_url = MSABot.getVMAMV(MSABot.getBot(robot, bot), data.channel);
 		
 		var request = require("request");
-		var fs = require("fs");
 		request({
 			url: vmamv_url + "/web-page/system-names",
 			method: "GET"
