@@ -8,6 +8,11 @@ var admin_data = { "room": process.env.adminRoom, "user_id": process.env.adminID
 var MSABot = require('./MSABot');
 var jenkinsapi = require('jenkins-api');
 const {Builder, By, Key, until} = require('selenium-webdriver');
+const firefox = require('selenium-webdriver/firefox');
+const screen = {
+  width: 640,
+  height: 800
+};
 
 exports.hubotAnalyze =  function(bot, robot, data, team_name)
 {
@@ -700,9 +705,11 @@ function action_dependency_graph(bot, robot, data, team_name)
 		function(e,r,b) 
 		{
 			if(e || !b) { return; }
-			console.log(b);
 			var system_name = b[0];
+			console.log(system_name);
+			
 			bot.postMessage(data.channel, "Start to get the denpency graph from VMAMV : (System-name : " + system_name + ")");
+			
 			getVMAMVGraphBase64(bot, data, vmamv_url, system_name);
 		});
 	}
@@ -711,6 +718,7 @@ function action_dependency_graph(bot, robot, data, team_name)
 async function getVMAMVGraphBase64(bot, data, url, system_name) {
 	let driver = await new Builder()
         .forBrowser('firefox')
+		.setFirefoxOptions(new firefox.Options().headless().windowSize(screen))
         .build();
 
 	await driver.get(url);
