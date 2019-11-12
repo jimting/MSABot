@@ -10,7 +10,7 @@ RUN useradd hubot -m
 
 RUN npm install -g hubot coffee-script yo generator-hubot
 
-RUN apt-get install firefox-geckodriver
+RUN npm install geckodriver
 
 USER hubot
 
