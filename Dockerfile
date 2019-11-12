@@ -10,6 +10,11 @@ RUN useradd hubot -m
 
 RUN npm install -g hubot coffee-script yo generator-hubot
 
+RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz
+RUN tar -xvzf geckodriver*
+RUN chmod +x geckodriver
+RUN export PATH=$PATH:/path-to-extracted-file/.
+
 USER hubot
 
 WORKDIR /home/hubot
