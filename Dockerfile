@@ -40,9 +40,6 @@ RUN BASE_URL=https://github.com/mozilla/geckodriver/releases/download \
   && curl -sL "$BASE_URL/$VERSION/geckodriver-$VERSION-linux64.tar.gz" | \
     tar -xz -C /usr/local/bin
 
-USER webdriver
-
-ENTRYPOINT ["entrypoint", "geckodriver"]
 
 USER hubot
 
