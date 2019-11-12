@@ -11,7 +11,7 @@ RUN useradd hubot -m
 RUN npm install -g hubot coffee-script yo generator-hubot
 
 # Firefox browser to run the tests
-RUN apt-get install -y firefox
+RUN sudo apt-get install -y firefox
  
 # Gecko Driver
 ENV GECKODRIVER_VERSION 0.26.0
