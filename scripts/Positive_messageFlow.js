@@ -704,6 +704,7 @@ function action_dependency_graph(bot, robot, data, team_name)
 			bot.postMessage(data.channel, "Start to get the denpency graph from VMAMV : (System-name : " + system_name + ")");
 			
 			getVMAMVGraphBase64(bot, data, vmamv_url, system_name);
+                        getVMAMVGraphBase64().catch(error => bot.postMessage(data.channel,'{"error" : "' + error.message + '"}'));
 		});
 	}
 }
@@ -713,7 +714,6 @@ async function getVMAMVGraphBase64(bot, data, url, system_name) {
 	let driver = await new Builder()
         .forBrowser('firefox')
 		.setFirefoxOptions(new firefox.Options().headless().windowSize(screen))
-		.withCapabilities(webdriver.Capabilities.firefox())
         .build();
 
 	await driver.get(url);
