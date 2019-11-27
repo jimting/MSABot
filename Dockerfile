@@ -10,9 +10,6 @@ RUN useradd hubot -m
 
 RUN npm install -g hubot coffee-script yo generator-hubot
 
-
-
-
 USER hubot
 
 WORKDIR /home/hubot

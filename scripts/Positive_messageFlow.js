@@ -684,7 +684,8 @@ function action_service_env(bot, robot, data, team_name)
 
 function action_dependency_graph(bot, robot, data, team_name)
 {
-	if(checkingVMAMV)
+	var bot_in_brain = MSABot.getBot(robot, bot);
+	if(checkingVMAMV(bot_in_brain, data.channel))
 	{
 		var vmamv_url = MSABot.getVMAMV(MSABot.getBot(robot, bot), data.channel);
 		
@@ -744,7 +745,6 @@ async function getVMAMVGraphBase64(bot, data, url, system_name) {
 	const picUrl = await imgurUpload(text.replace("data:image/png;base64,",""));
 	
 	return picUrl;
-
 
 }
 
