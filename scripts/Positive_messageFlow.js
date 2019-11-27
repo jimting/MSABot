@@ -7,6 +7,7 @@
 var admin_data = { "room": process.env.adminRoom, "user_id": process.env.adminID};
 var MSABot = require('./MSABot');
 var jenkinsapi = require('jenkins-api');
+const webdriver = require('selenium-webdriver');
 const {Builder, By, Key, until} = require('selenium-webdriver');
 const firefox = require('selenium-webdriver/firefox');
 const screen = {
