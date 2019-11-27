@@ -708,11 +708,7 @@ function action_dependency_graph(bot, robot, data, team_name)
 }
 
 async function getVMAMVGraphBase64(bot, data, url, system_name) {
-	let path = require('geckodriver').path;
-
-	let service = new firefox.ServiceBuilder(path).build();
-	firefox.setDefaultService(service);
-
+	
 	let driver = await new Builder()
         .forBrowser('firefox')
 		.setFirefoxOptions(new firefox.Options().headless().windowSize(screen))
