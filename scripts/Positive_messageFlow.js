@@ -7,13 +7,6 @@
 var admin_data = { "room": process.env.adminRoom, "user_id": process.env.adminID};
 var MSABot = require('./MSABot');
 var jenkinsapi = require('jenkins-api');
-const webdriver = require('selenium-webdriver');
-const {Builder, By, Key, until} = require('selenium-webdriver');
-const firefox = require('selenium-webdriver/firefox');
-const screen = {
-  width: 640,
-  height: 800
-};
 
 exports.hubotAnalyze =  function(bot, robot, data, team_name)
 {
@@ -701,73 +694,18 @@ function action_dependency_graph(bot, robot, data, team_name)
 			var system_name = b.replace("[\"", "").replace("\"]", "");
 			console.log(system_name);
 			
-			bot.postMessage(data.channel, "Start to get the denpency graph from VMAMV : (System-name : " + system_name + ")");
-			
-			getVMAMVGraphBase64(bot, data, vmamv_url, system_name);
-                        getVMAMVGraphBase64().catch(error => bot.postMessage(data.channel,'{"error" : "' + error.message + '"}'));
+			bot.postMessage(data.channel, "Start to get the denpency graph from VMAMV : (System-name : " + system_name + ") \nJust wait for a while!");
+			var request2 = require("request");
+			request2({
+				url: "htp://140.121.197.130:5505/vmamv?url=" + vmamv_url + "&system_name=" + system_name,
+				method: "GET"
+			}, 
+			function(e2,r2,b2) 
+			{
+				if(e2 || !b2) { return; }
+				var json = JSON.parse(b2);
+				bot.postMessage(data.channel, json.url);
+			}
 		});
 	}
-}
-
-async function getVMAMVGraphBase64(bot, data, url, system_name) {
-	
-	let driver = await new Builder()
-        .forBrowser('firefox')
-		.setFirefoxOptions(new firefox.Options().headless().windowSize(screen))
-        .build();
-
-	await driver.get(url);
-	
-	await driver.manage().window().maximize();
-	
-	await driver.findElement(By.xpath("//button[@id='systemsDropdownMenuButton']")).click();
-	console.log("<< Show the Service List!");
-	
-	//await sleep(2000);
-  
-	await driver.findElement(By.xpath("//button[@value='"+system_name+"']")).click();
-	console.log("<< Select the "+system_name+" and show the graph!");
-	
-	await sleep(5000);
-	driver.executeScript('document.body.style.MozTransform = "scale(1.0)";');
-	console.log("<< mouse scroll down.");
-
-	await driver.findElement(By.xpath("//button[@id='system-options-menu-button']/span")).click();
-	console.log("<< Open the hambur list.");
-	
-	await sleep(4000);
-  
-	await driver.findElement(By.xpath("//a[@id='download-graph']")).click();
-	console.log("<< Click the download button.");
-	
-	//await sleep(2000);
-	
-	const text = await driver.findElement(By.xpath("//a[@id='download-graph']")).getAttribute("href");
-	console.log(">> Get the href.");
-	
-	const picUrl = await imgurUpload(text.replace("data:image/png;base64,",""));
-	
-	return picUrl;
-
-}
-
-function sleep(millis) {
-	console.log("<< Wait for seconds.");
-    return new Promise(resolve => setTimeout(resolve, millis));
-}
-
-function imgurUpload(base64)
-{
-	
-var imgur = require('imgur');
-imgur.setClientId('b9fe259fe23436f');
-imgur.uploadBase64(base64)
-    .then(function (json) {
-        console.log(json.data.link);
-		return json.data.link;
-    })
-    .catch(function (err) {
-        console.error(err.message);
-		return null;
-    });
 }
