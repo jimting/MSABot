@@ -343,7 +343,7 @@ function action_bot_help(bot, robot, data, team_name)
 /* MSABot join and send hello message to this channel */
 function action_bot_join(bot, robot, data, team_name)
 {
-	bot.postMessage(data.channel, "Hi, I'm MSABot. I can assist you to look out the service you're developing and maintaining. \n Use @MSABot help to figure out how to use me!");
+	bot.postMessage(data.channel, "Hi, I'm MSABot. I can assist you to look out the service you're developing and maintaining. \n Use @MSABot help to figure out how to use me! \nRemember to setting server urls before using me!");
 }
 
 /* Dev Status : true */
