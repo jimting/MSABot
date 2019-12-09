@@ -69,7 +69,7 @@ module.exports = function(robot)
     sub.setEncoding('utf8');
     sub.on('data', function(note) {
         var json = JSON.parse(note);
-		var result = "["+json.status+"] " + json.content";
+		var result = "["+json.status+"] " + json.content;
        
 		var bots = robot.brain.get('bots');
 		for(var i = 0;i < bots.length; i++)
