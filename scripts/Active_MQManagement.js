@@ -52,8 +52,14 @@ module.exports = function(robot)
     sub.setEncoding('utf8');
     sub.on('data', function(note) {
         var json = JSON.parse(note);
-		var result = "["+json.status+"] Your service " + json.appName + " on Eureka Server had some activities.";
-       
+		var result = "["+json.status+"]";
+		switch(json.status)
+		{
+			case "Failed" : result +=  "Service : " + json.appName + " is dead. Pleace check it!";break;
+			case "Server Start" : result += "Your Eureka Server just start working!";break;
+			case "Server Registry Start" : result += "Your Eureka Registry Server just start working!";break;
+		}
+		
 		var bots = robot.brain.get('bots');
 		for(var i = 0;i < bots.length; i++)
         {
