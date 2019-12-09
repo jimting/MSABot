@@ -330,12 +330,12 @@ function action_bot_help(bot, robot, data, team_name)
 	using_guide += "4. Search the service's api list.	ex. @MSABot Give me the api list on ServiceA.\n";
 	using_guide += "5. Search the env setting.			ex. @MSABot Tell me the env setting info.\n";
 	using_guide += "6. Search the build data on Jenkins. ex. @MSABot What's the reason my building failed for ServiceA?\n";
-	using_guide += "(Not yet)7. Search the connection status on Eureka. ex. @MSABot Tell me the connection error about ServiceA.\n";
-	using_guide += "(Not yet)8. Get the dependency graph from VMAMV.	ex. @MSABot give me the dependency graph.\n";
+	using_guide += "7. Search the connection status on Eureka. ex. @MSABot Tell me the connection error about ServiceA.\n";
+	using_guide += "8. Get the dependency graph from VMAMV.	ex. @MSABot give me the dependency graph.\n";
 	using_guide += "** Change your server setting **\n";
 	using_guide += "8. Set the Eureka/Jenkins/Zuul/VMAMV Url. ex. \"eureka/jenkins/zuul/vmamv set http://...\" \n";
-	using_guide += "9. Get the Eureka/Jenkins/Zuul/VMAMV Url. ex. \"eureka/jenkins/zuul/vmamv url\"";
-	
+	using_guide += "9. Get the Eureka/Jenkins/Zuul/VMAMV Url. ex. \"eureka/jenkins/zuul/vmamv url\"\n";
+	using_guide += "Remember to set the urls before using me! And, url format ending with '/' (ex. http://aaa.bbb/)";
 	bot.postMessage(data.channel, using_guide);
 }
 
