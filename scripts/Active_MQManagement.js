@@ -52,7 +52,7 @@ module.exports = function(robot)
     sub.setEncoding('utf8');
     sub.on('data', function(note) {
         var json = JSON.parse(note);
-		var result = "["+json.status+"] Your service " + json.appName + " on Eureka Server has some activities.";
+		var result = "["+json.status+"] Your service " + json.appName + " on Eureka Server had some activities.";
        
 		var bots = robot.brain.get('bots');
 		for(var i = 0;i < bots.length; i++)
