@@ -685,7 +685,7 @@ function action_dependency_graph(bot, robot, data, team_name)
 		
 		var request = require("request");
 		request({
-			url: vmamv_url + "/web-page/system-names",
+			url: vmamv_url + "web-page/system-names",
 			method: "GET"
 		}, 
 		function(e,r,b) 
