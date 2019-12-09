@@ -705,7 +705,7 @@ function action_dependency_graph(bot, robot, data, team_name)
 				if(e2 || !b2) { return; }
 				var json = JSON.parse(b2);
 				bot.postMessage(data.channel, json.url);
-			}
+			});
 		});
 	}
 }
