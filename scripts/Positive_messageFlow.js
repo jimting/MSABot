@@ -697,7 +697,7 @@ function action_dependency_graph(bot, robot, data, team_name)
 			bot.postMessage(data.channel, "Start to get the denpency graph from VMAMV : (System-name : " + system_name + ") \nJust wait for a while!");
 			var request2 = require("request");
 			request2({
-				url: "htp://140.121.197.130:5505/vmamv?url=" + vmamv_url + "&system_name=" + system_name,
+				url: "http://140.121.197.130:5505/vmamv?url=" + vmamv_url + "&system_name=" + system_name,
 				method: "GET"
 			}, 
 			function(e2,r2,b2) 
