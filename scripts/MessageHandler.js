@@ -127,7 +127,7 @@ function mentionAndAnalyze(bot, robot, data, team_name)
 	console.log(data.text);
     if(result != null)
     {
-		stage0(bot, robot, data, team_name);
+		stage_rasa(bot, robot, data, team_name);
 		return true;
     }
 	else
@@ -187,14 +187,14 @@ function checkingVMAMV(bot, channel)
 }
 
 /*===================================*/
-// stage 0 : if analyze no intent, ask the intent, if have, go stage1 
-// stage 1 : analyze the intent result, if have service name, skip stage2 to mission | if the intent doesn't need the service name, go to stage3
-// stage 2 : if lack service name, ask service name.
-// stage 3 : mission.
+// stage rasa : if analyze no intent, ask the intent, if have, go stage_check_intent 
+// stage check intent : analyze the intent result, if have service name, skip stage_no_service to mission | if the intent doesn't need the service name, go to stage actions
+// stage no service : if lack service name, ask service name.
+// stage actions : mission.
 /*===================================*/
 
 /* send request and check if result has intent */
-function stage0(bot, robot, data, team_name)
+function stage_rasa(bot, robot, data, team_name)
 {
 	var request = require('request');
 	var options = {
@@ -226,11 +226,11 @@ function stage0(bot, robot, data, team_name)
 			{
 				console.log("有先前對話進行中");
 				intent_before = robot.brain.get('intent'+data.channel);
-				stage1(bot, robot, data, team_name, service, intent_before);
+				stage_check_intent(bot, robot, data, team_name, service, intent_before);
 			}
 			else if(intent != "none")
 			{
-				stage1(bot, robot, data, team_name, service, intent);
+				stage_check_intent(bot, robot, data, team_name, service, intent);
 			}
 			else
 			{
@@ -249,7 +249,7 @@ function stage0(bot, robot, data, team_name)
 }
 
 /*check if the result has service name */
-function stage1(bot, robot, data, team_name, service, intent)
+function stage_check_intent(bot, robot, data, team_name, service, intent)
 {
 	// setting the stage and intent first.
 	robot.brain.set("stage"+data.channel, 1);
@@ -277,7 +277,7 @@ function stage1(bot, robot, data, team_name, service, intent)
 		/* if have no service name, ask them the service name */
 		if(service=="none" || service==null)
 		{
-			stage2(bot, robot, data, team_name, intent);
+			stage_no_service(bot, robot, data, team_name, intent);
 		}
 		else /* if have, go to stage3 */
 		{
@@ -295,7 +295,7 @@ function stage1(bot, robot, data, team_name, service, intent)
 }
 
 /* to ask user what service he/she wants */
-function stage2(bot, robot, data, team_name, intent)
+function stage_no_service(bot, robot, data, team_name, intent)
 {
 	// setting the stage first.
 	robot.brain.set("stage"+data.channel, 2);
