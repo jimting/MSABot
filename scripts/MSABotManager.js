@@ -6,7 +6,7 @@
 //   MSABot的管理
 //
 // Commands:
-//   robot list : 列出所有機器人 
+//  robot list : 列出所有機器人 
 //	robot listchannel {group} : 列出所有頻道
 //	robot announcement {message} : 所有頻道發通知
 //	robot restart : 機器人檢查狀態並重啟
