@@ -281,6 +281,7 @@ function stage_check_intent(bot, robot, data, team_name, service, intent)
 		}
 		else /* if have, go to stage3 */
 		{
+			robot.brain.set('service'+data.channel, service);
 			switch(intent)
 			{
 				case "action_detail_api"		:action_detail_api(bot, robot, data, team_name, service);return;
@@ -299,22 +300,28 @@ function stage_no_service(bot, robot, data, team_name, intent)
 {
 	// setting the stage first.
 	robot.brain.set("stage"+data.channel, 2);
-	
-	var intentStr = "";
-	switch(intent)
+	service_before = robot.brain.get('service'+data.channel);
+	if(service_before!=null)
 	{
-		case "action_detail_api"		:intentStr = "service api's detail";break;
-		case "action_connect_error"		:intentStr = "service's connect error data";break;
-		case "action_build_fail"		:intentStr = "service's last failed building data";break;
-		case "action_service_health"	:intentStr = "service's health data";break;
-		case "action_service_info"		:intentStr = "service's information";break;
-		case "action_service_using_info":intentStr = "service's using overview";break;
-		case "action_service_api_list"	:intentStr = "service's api list";break;
-		case "action_service_env"		:intentStr = "service's env setting";break;
+		stage_check_intent(bot, robot, data, team_name, service_before, intent)
 	}
-	var result = "Hey, before we catch the "+intentStr+", we need to know what service you wanna search. ";
-	bot.postMessage(data.channel, result);
-	
+	else
+	{
+		var intentStr = "";
+		switch(intent)
+		{
+			case "action_detail_api"		:intentStr = "service api's detail";break;
+			case "action_connect_error"		:intentStr = "service's connect error data";break;
+			case "action_build_fail"		:intentStr = "service's last failed building data";break;
+			case "action_service_health"	:intentStr = "service's health data";break;
+			case "action_service_info"		:intentStr = "service's information";break;
+			case "action_service_using_info":intentStr = "service's using overview";break;
+			case "action_service_api_list"	:intentStr = "service's api list";break;
+			case "action_service_env"		:intentStr = "service's env setting";break;
+		}
+		var result = "Hey, before we catch the "+intentStr+", we need to know what service you wanna search. ";
+		bot.postMessage(data.channel, result);
+	}
 	//end the flow
 }
 
